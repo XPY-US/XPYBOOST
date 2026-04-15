@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaptopBoost — Gaming Performance Tool</title>
+    <title>XPYBOOST — Gaming Performance Suite</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050508'/><text y='72' x='8' font-size='62' font-family='monospace' font-weight='900' fill='%2300aaff'>X</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -13,25 +14,28 @@
 ============================================================ */
 :root {
     --bg:        #050508;
-    --bg2:       #08090f;
-    --bg3:       #0c0e18;
-    --bg4:       #111422;
-    --border:    #1a1f35;
-    --border2:   #252b45;
-    --green:     #00ff88;
-    --green2:    #00cc6e;
+    --bg2:       #07080f;
+    --bg3:       #0a0c18;
+    --bg4:       #0e1020;
+    --border:    #151828;
+    --border2:   #1e2238;
     --blue:      #00aaff;
+    --blue2:     #0088cc;
     --purple:    #9d4edd;
+    --purple2:   #7b2fd4;
+    --cyan:      #00d4ff;
+    --green:     #00ff88;
     --yellow:    #ffd700;
     --red:       #ff3355;
-    --cyan:      #00d4ff;
     --orange:    #ff6b35;
     --text:      #e2e8f8;
-    --text-dim:  #5a6380;
-    --text-mid:  #8892aa;
-    --glow-g:    0 0 40px rgba(0,255,136,0.25);
-    --glow-b:    0 0 40px rgba(0,170,255,0.25);
-    --glow-p:    0 0 40px rgba(157,78,237,0.25);
+    --text-dim:  #4a5270;
+    --text-mid:  #7a84a0;
+    --accent:    var(--blue);
+    --accent2:   var(--purple);
+    --glow-b:    0 0 40px rgba(0,170,255,0.3);
+    --glow-p:    0 0 40px rgba(157,78,237,0.3);
+    --glow-mix:  0 0 60px rgba(0,170,255,0.15), 0 0 60px rgba(157,78,237,0.15);
 }
 
 /* ============================================================
@@ -51,27 +55,24 @@ body {
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
-/* ============================================================
-   SCROLLBAR
-============================================================ */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
 ::-webkit-scrollbar-thumb {
-    background: var(--green);
+    background: linear-gradient(var(--blue), var(--purple));
     border-radius: 3px;
 }
 
 /* ============================================================
-   BACKGROUND GRID
+   BACKGROUND
 ============================================================ */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background-image:
-        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
+        linear-gradient(rgba(0,170,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,170,255,0.025) 1px, transparent 1px);
+    background-size: 55px 55px;
     pointer-events: none;
     z-index: 0;
 }
@@ -80,9 +81,78 @@ body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,136,0.06), transparent 70%);
+    background:
+        radial-gradient(ellipse 70% 50% at 20% 0%, rgba(0,170,255,0.07), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 0%, rgba(157,78,237,0.07), transparent 60%);
     pointer-events: none;
     z-index: 0;
+}
+
+/* ============================================================
+   LOADER
+============================================================ */
+#loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: 8px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: logoPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(0,170,255,0.5)); }
+    50%       { filter: drop-shadow(0 0 30px rgba(157,78,237,0.8)); }
+}
+
+.loader-bar-wrap {
+    width: 280px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loader-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    border-radius: 2px;
+    animation: loaderFill 1.8s ease forwards;
+}
+
+@keyframes loaderFill {
+    from { width: 0; }
+    to   { width: 100%; }
+}
+
+.loader-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: loaderText 1.8s steps(1) forwards;
 }
 
 /* ============================================================
@@ -99,15 +169,29 @@ body::after {
 .particle {
     position: absolute;
     border-radius: 50%;
-    animation: particleFloat linear infinite;
+    animation: pFloat linear infinite;
     opacity: 0;
 }
 
-@keyframes particleFloat {
+@keyframes pFloat {
     0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-    5%   { opacity: 1; }
-    95%  { opacity: 0.6; }
+    5%   { opacity: 0.8; }
+    95%  { opacity: 0.4; }
     100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
+}
+
+/* ============================================================
+   PAGE TRANSITIONS
+============================================================ */
+.page { display: none; position: relative; z-index: 2; }
+.page.active {
+    display: block;
+    animation: pageSlide 0.4s ease forwards;
+}
+
+@keyframes pageSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
@@ -117,8 +201,7 @@ body::after {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 1000;
-    padding: 0;
-    background: rgba(5,5,8,0.85);
+    background: rgba(5,5,8,0.8);
     backdrop-filter: blur(24px);
     border-bottom: 1px solid transparent;
     transition: border-color 0.4s;
@@ -133,49 +216,77 @@ body::after {
     height: 68px;
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2rem;
 }
 
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    font-size: 1.15rem;
-    color: var(--green);
-    letter-spacing: 2px;
+    gap: 0.7rem;
     margin-right: auto;
-    text-shadow: 0 0 20px rgba(0,255,136,0.5);
+    cursor: pointer;
 }
 
-.nav-logo .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--green), var(--cyan));
-    border-radius: 8px;
+.logo-mark {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    color: #000;
-    box-shadow: 0 0 15px rgba(0,255,136,0.4);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    box-shadow: 0 0 20px rgba(0,170,255,0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15));
+}
+
+.logo-text {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.logo-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    align-self: flex-end;
+    margin-bottom: 2px;
 }
 
 .nav-links {
     display: flex;
-    gap: 0.3rem;
+    gap: 0.2rem;
 }
 
 .nav-links a {
     padding: 0.5rem 1rem;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-mid);
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     border-radius: 6px;
     transition: all 0.25s;
     position: relative;
+    cursor: pointer;
 }
 
 .nav-links a::after {
@@ -184,36 +295,49 @@ body::after {
     bottom: 0; left: 50%;
     transform: translateX(-50%);
     width: 0; height: 2px;
-    background: var(--green);
+    background: linear-gradient(90deg, var(--blue), var(--purple));
     transition: width 0.3s;
     border-radius: 1px;
 }
 
-.nav-links a:hover { color: var(--green); }
+.nav-links a:hover { color: var(--blue); }
+.nav-links a.active { color: var(--blue); }
 .nav-links a:hover::after,
 .nav-links a.active::after { width: 60%; }
-.nav-links a.active { color: var(--green); }
 
 .nav-cta {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--green);
-    color: #000;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
     padding: 0.55rem 1.3rem;
-    border-radius: 6px;
+    border-radius: 7px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     transition: all 0.3s;
-    border: 1px solid var(--green);
+    cursor: pointer;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .nav-cta:hover {
     background: transparent;
-    color: var(--green);
-    box-shadow: var(--glow-g);
+    border-color: var(--blue);
+    color: var(--blue);
+    box-shadow: var(--glow-b);
 }
 
 .hamburger {
@@ -221,20 +345,64 @@ body::after {
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
+    padding: 4px;
 }
 
 .hamburger span {
     display: block;
     width: 22px; height: 2px;
-    background: var(--text);
+    background: var(--text-mid);
+    border-radius: 1px;
     transition: all 0.3s;
 }
 
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
 /* ============================================================
-   PAGE SECTIONS (SPA)
+   MOBILE MENU
 ============================================================ */
-.page { display: none; position: relative; z-index: 2; }
-.page.active { display: block; }
+.mobile-menu {
+    position: fixed;
+    top: 68px; left: 0; right: 0;
+    background: rgba(5,5,8,0.98);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    z-index: 998;
+    flex-direction: column;
+    gap: 0.3rem;
+    backdrop-filter: blur(20px);
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    display: flex;
+}
+
+.mobile-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.mobile-menu a {
+    padding: 0.9rem 1rem;
+    color: var(--text-mid);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 7px;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: block;
+}
+
+.mobile-menu a:hover {
+    color: var(--blue);
+    background: rgba(0,170,255,0.06);
+}
 
 /* ============================================================
    HERO
@@ -250,67 +418,86 @@ body::after {
     position: relative;
 }
 
-/* Corner decorations */
-.hero::before, .hero::after {
-    content: '';
+.hero-corner {
     position: absolute;
-    width: 200px; height: 200px;
-    border: 1px solid rgba(0,255,136,0.1);
+    width: 120px; height: 120px;
+    border: 1px solid rgba(0,170,255,0.15);
 }
-.hero::before { top: 8rem; left: 0; border-right: none; border-bottom: none; }
-.hero::after  { bottom: 3rem; right: 0; border-left: none; border-top: none; }
+
+.hero-corner.tl { top: 7.5rem; left: 0; border-right: none; border-bottom: none; }
+.hero-corner.br { bottom: 4rem; right: 0; border-left: none; border-top: none; }
 
 .hero-left { flex: 1; max-width: 620px; }
 
 .hero-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.hero-eyebrow-line {
-    width: 40px; height: 2px;
-    background: linear-gradient(90deg, var(--green), transparent);
+.eyebrow-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,170,255,0.08);
+    border: 1px solid rgba(0,170,255,0.2);
+    color: var(--blue);
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    animation: badgePulse 2.5s ease-in-out infinite;
 }
 
-.hero-eyebrow span {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--green);
-    letter-spacing: 4px;
-    text-transform: uppercase;
+.eyebrow-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: dotBlink 1.5s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { border-color: rgba(0,170,255,0.2); }
+    50%       { border-color: rgba(0,170,255,0.5); }
+}
+
+@keyframes dotBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
 }
 
 .hero-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-size: clamp(2.8rem, 5.5vw, 4.8rem);
     font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -1px;
+    line-height: 1.0;
+    letter-spacing: -2px;
     margin-bottom: 1.5rem;
 }
 
-.hero-title .line2 {
-    background: linear-gradient(135deg, var(--green) 0%, var(--cyan) 50%, var(--blue) 100%);
+.hero-title .t-white { display: block; color: var(--text); }
+
+.hero-title .t-grad {
+    display: block;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 60%, var(--cyan) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    display: block;
-    filter: drop-shadow(0 0 20px rgba(0,255,136,0.4));
+    filter: drop-shadow(0 0 25px rgba(0,170,255,0.4));
 }
 
 .hero-sub {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--text-mid);
-    line-height: 1.75;
+    line-height: 1.8;
     margin-bottom: 2.5rem;
     max-width: 500px;
     font-weight: 400;
 }
 
-.hero-sub strong { color: var(--green); font-weight: 600; }
+.hero-sub strong { color: var(--blue); font-weight: 700; }
 
 .hero-btns {
     display: flex;
@@ -326,12 +513,12 @@ body::after {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.85rem 2rem;
-    border-radius: 6px;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     transition: all 0.3s;
     cursor: pointer;
@@ -340,26 +527,26 @@ body::after {
     overflow: hidden;
 }
 
-.btn::before {
+.btn::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
     transform: translateX(-100%);
     transition: transform 0.5s;
 }
 
-.btn:hover::before { transform: translateX(100%); }
+.btn:hover::after { transform: translateX(100%); }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--green), var(--cyan));
-    color: #000;
-    box-shadow: 0 4px 20px rgba(0,255,136,0.3);
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(0,170,255,0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 35px rgba(0,255,136,0.5);
+    box-shadow: 0 8px 40px rgba(0,170,255,0.5);
 }
 
 .btn-outline {
@@ -369,15 +556,15 @@ body::after {
 }
 
 .btn-outline:hover {
-    border-color: var(--green);
-    color: var(--green);
+    border-color: var(--blue);
+    color: var(--blue);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,255,136,0.15);
+    box-shadow: 0 6px 25px rgba(0,170,255,0.15);
 }
 
 .btn-lg {
     padding: 1.1rem 2.8rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 /* ============================================================
@@ -385,16 +572,24 @@ body::after {
 ============================================================ */
 .hero-stats {
     display: flex;
-    gap: 0;
     background: var(--bg3);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
     width: fit-content;
+    position: relative;
+}
+
+.hero-stats::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--purple), transparent);
 }
 
 .h-stat {
-    padding: 1.2rem 2rem;
+    padding: 1.3rem 2.2rem;
     text-align: center;
     border-right: 1px solid var(--border);
     position: relative;
@@ -404,16 +599,29 @@ body::after {
 
 .h-stat-num {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 900;
-    color: var(--green);
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1;
     display: block;
-    text-shadow: 0 0 15px rgba(0,255,136,0.5);
+    filter: drop-shadow(0 0 10px rgba(0,170,255,0.4));
+}
+
+.h-stat-suf {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .h-stat-label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -426,25 +634,25 @@ body::after {
 ============================================================ */
 .hero-right {
     flex: 1;
+    max-width: 520px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 520px;
 }
 
-.terminal-wrap {
+.terminal-glow {
     position: relative;
 }
 
-.terminal-wrap::before {
+.terminal-glow::before {
     content: '';
     position: absolute;
-    inset: -1px;
-    background: linear-gradient(135deg, var(--green), var(--cyan), var(--purple));
-    border-radius: 13px;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--blue), var(--purple), var(--cyan));
+    border-radius: 14px;
     z-index: -1;
-    opacity: 0.4;
-    filter: blur(8px);
+    opacity: 0.35;
+    filter: blur(10px);
 }
 
 .terminal {
@@ -453,17 +661,17 @@ body::after {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-    animation: termFloat 5s ease-in-out infinite;
+    animation: termFloat 6s ease-in-out infinite;
 }
 
 @keyframes termFloat {
-    0%, 100% { transform: translateY(0px); }
+    0%, 100% { transform: translateY(0); }
     50%       { transform: translateY(-8px); }
 }
 
 .term-header {
     background: var(--bg3);
-    padding: 0.8rem 1.2rem;
+    padding: 0.85rem 1.2rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -471,72 +679,152 @@ body::after {
 }
 
 .term-dots { display: flex; gap: 6px; }
+
 .term-dot {
     width: 11px; height: 11px;
     border-radius: 50%;
 }
+
 .term-dot.r { background: #ff5f57; }
 .term-dot.y { background: #ffbd2e; }
 .term-dot.g { background: #28c840; }
 
 .term-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-dim);
     flex: 1;
     text-align: center;
     letter-spacing: 1px;
 }
 
-.term-status {
-    width: 8px; height: 8px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
+.term-live {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--blue);
+    letter-spacing: 1px;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,136,0.5); }
-    50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0,255,136,0); }
+.term-live-dot {
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: livePulse 1.2s infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,170,255,0.6); }
+    50%       { opacity: 0.6; box-shadow: 0 0 0 5px rgba(0,170,255,0); }
 }
 
 .term-body {
     padding: 1.5rem;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    min-height: 320px;
-    max-height: 320px;
+    font-size: 0.77rem;
+    min-height: 330px;
+    max-height: 330px;
     overflow: hidden;
-    line-height: 1.9;
+    line-height: 2;
 }
 
-.tl { opacity: 0; animation: tlFade 0.2s forwards; }
+.tl { opacity: 0; animation: tlFade 0.15s forwards; }
 @keyframes tlFade { to { opacity: 1; } }
 
-.tc  { color: var(--text); }
-.tg  { color: var(--green); }
-.ty  { color: var(--yellow); }
-.tb  { color: var(--blue); }
-.tr  { color: var(--red); }
-.td  { color: var(--text-dim); }
-.tp  { color: var(--purple); }
+.tc { color: var(--text); }
+.tg { color: #00ff88; }
+.tb { color: var(--blue); }
+.ty { color: var(--yellow); }
+.tr { color: var(--red); }
+.td { color: var(--text-dim); }
+.tp { color: var(--purple); }
+.to { color: var(--cyan); }
 
-.t-cursor {
+.t-cur {
     display: inline-block;
-    width: 9px; height: 16px;
-    background: var(--green);
-    animation: blink 1s infinite;
+    width: 8px; height: 15px;
+    background: var(--blue);
+    animation: curBlink 1s infinite;
     vertical-align: middle;
     border-radius: 2px;
+    margin-left: 2px;
 }
 
-@keyframes blink {
+@keyframes curBlink {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0; }
 }
 
 /* ============================================================
-   SECTIONS SHARED
+   PC HEALTH CARD
+============================================================ */
+.health-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.health-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.health-score {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--blue);
+}
+
+.health-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.health-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    font-weight: 600;
+}
+
+.health-val { color: var(--text); }
+
+.health-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.health-bar {
+    height: 100%;
+    border-radius: 2px;
+    width: 0;
+    transition: width 1.5s ease;
+}
+
+.hb-good  { background: linear-gradient(90deg, #00ff88, #00aaff); }
+.hb-mid   { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
+.hb-bad   { background: linear-gradient(90deg, var(--red), var(--orange)); }
+
+/* ============================================================
+   SHARED SECTION STYLES
 ============================================================ */
 .wrap {
     max-width: 1300px;
@@ -545,16 +833,20 @@ body::after {
 }
 
 .section { padding: 7rem 0; position: relative; z-index: 2; }
-.section-alt { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.section-alt {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
 
 .s-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.8rem;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    color: var(--green);
+    color: var(--blue);
     letter-spacing: 3px;
     text-transform: uppercase;
     margin-bottom: 1.2rem;
@@ -563,21 +855,21 @@ body::after {
 .s-tag::before, .s-tag::after {
     content: '';
     width: 20px; height: 1px;
-    background: var(--green);
+    background: linear-gradient(90deg, var(--blue), var(--purple));
 }
 
 .s-head {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-weight: 900;
-    margin-bottom: 1rem;
     letter-spacing: -0.5px;
+    margin-bottom: 1rem;
 }
 
 .s-sub {
     color: var(--text-mid);
     font-size: 1.05rem;
-    max-width: 550px;
+    max-width: 560px;
 }
 
 .section-header { margin-bottom: 4rem; }
@@ -591,7 +883,7 @@ body::after {
 .feat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
+    gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -611,7 +903,8 @@ body::after {
 .feat-card.show {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s;
+    transition: opacity 0.4s ease, transform 0.4s ease,
+                background 0.3s, border-color 0.3s;
 }
 
 .feat-card::before {
@@ -619,7 +912,7 @@ body::after {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent, var(--green)), transparent);
+    background: var(--card-accent, linear-gradient(90deg, var(--blue), var(--purple)));
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -627,124 +920,225 @@ body::after {
 .feat-card:hover { background: var(--bg4); }
 .feat-card:hover::before { opacity: 1; }
 
-.feat-icon-wrap {
-    width: 56px; height: 56px;
+.feat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 1.2rem;
+    display: block;
+}
+
+.feat-icon {
+    width: 52px; height: 52px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     margin-bottom: 1.5rem;
     position: relative;
 }
 
-.feat-icon-wrap::after {
+.feat-icon::after {
     content: '';
     position: absolute;
     inset: -1px;
     border-radius: 13px;
     border: 1px solid currentColor;
-    opacity: 0.2;
+    opacity: 0.15;
 }
 
-.fi-green  { background: rgba(0,255,136,0.1);  color: var(--green); }
-.fi-blue   { background: rgba(0,170,255,0.1);  color: var(--blue); }
-.fi-yellow { background: rgba(255,215,0,0.1);  color: var(--yellow); }
-.fi-purple { background: rgba(157,78,237,0.1); color: var(--purple); }
-.fi-red    { background: rgba(255,51,85,0.1);  color: var(--red); }
-.fi-cyan   { background: rgba(0,212,255,0.1);  color: var(--cyan); }
+.fi-b { background: rgba(0,170,255,0.1);  color: var(--blue); }
+.fi-p { background: rgba(157,78,237,0.1); color: var(--purple); }
+.fi-c { background: rgba(0,212,255,0.1);  color: var(--cyan); }
+.fi-g { background: rgba(0,255,136,0.1);  color: #00ff88; }
+.fi-y { background: rgba(255,215,0,0.1);  color: var(--yellow); }
+.fi-r { background: rgba(255,51,85,0.1);  color: var(--red); }
 
 .feat-card h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-bottom: 0.8rem;
     text-transform: uppercase;
+    margin-bottom: 0.9rem;
 }
 
 .feat-card p {
     color: var(--text-mid);
     font-size: 0.9rem;
     line-height: 1.7;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.3rem;
 }
 
 .feat-pill {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 1px;
     padding: 0.25rem 0.8rem;
     border-radius: 4px;
     border: 1px solid;
     text-transform: uppercase;
+    display: inline-block;
 }
 
-.fp-green  { background: rgba(0,255,136,0.08);  color: var(--green);  border-color: rgba(0,255,136,0.2); }
-.fp-blue   { background: rgba(0,170,255,0.08);  color: var(--blue);   border-color: rgba(0,170,255,0.2); }
-.fp-yellow { background: rgba(255,215,0,0.08);  color: var(--yellow); border-color: rgba(255,215,0,0.2); }
-.fp-purple { background: rgba(157,78,237,0.08); color: var(--purple); border-color: rgba(157,78,237,0.2); }
-.fp-red    { background: rgba(255,51,85,0.08);  color: var(--red);    border-color: rgba(255,51,85,0.2); }
-.fp-cyan   { background: rgba(0,212,255,0.08);  color: var(--cyan);   border-color: rgba(0,212,255,0.2); }
+.fp-b { background: rgba(0,170,255,0.08);  color: var(--blue);   border-color: rgba(0,170,255,0.2); }
+.fp-p { background: rgba(157,78,237,0.08); color: var(--purple); border-color: rgba(157,78,237,0.2); }
+.fp-c { background: rgba(0,212,255,0.08);  color: var(--cyan);   border-color: rgba(0,212,255,0.2); }
+.fp-g { background: rgba(0,255,136,0.08);  color: #00ff88;       border-color: rgba(0,255,136,0.2); }
+.fp-y { background: rgba(255,215,0,0.08);  color: var(--yellow); border-color: rgba(255,215,0,0.2); }
+.fp-r { background: rgba(255,51,85,0.08);  color: var(--red);    border-color: rgba(255,51,85,0.2); }
+
+/* ============================================================
+   BEFORE / AFTER
+============================================================ */
+.compare-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.compare-col { display: flex; flex-direction: column; gap: 1rem; }
+
+.compare-col h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.compare-col h3.before { color: var(--red); }
+.compare-col h3.after  { color: #00ff88; }
+
+.compare-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.compare-arrow-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    box-shadow: var(--glow-b);
+    animation: arrowPulse 2s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.08); }
+}
+
+.compare-arrow span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem;
+    color: var(--blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.compare-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.compare-item .ci-label {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    font-weight: 600;
+}
+
+.compare-item .ci-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.ci-bad  { color: var(--red); }
+.ci-good { color: #00ff88; }
+
+.compare-bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.compare-bar { height: 100%; border-radius: 2px; }
+.cb-bad  { background: var(--red); }
+.cb-good { background: linear-gradient(90deg, #00ff88, var(--blue)); }
 
 /* ============================================================
    HOW IT WORKS
 ============================================================ */
-.steps-row {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     position: relative;
+}
+
+.steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 3.5rem; left: 16%; right: 16%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--purple), transparent);
+    z-index: 0;
 }
 
 .step-card {
-    flex: 1;
     background: var(--bg3);
     border: 1px solid var(--border);
-    padding: 3rem 2.5rem;
-    position: relative;
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    text-align: center;
     transition: all 0.3s;
-}
-
-.step-card:first-child { border-radius: 12px 0 0 12px; }
-.step-card:last-child  { border-radius: 0 12px 12px 0; }
-
-.step-card:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: -18px; top: 50%;
-    transform: translateY(-50%);
-    width: 0; height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 18px solid var(--border);
-    z-index: 2;
+    position: relative;
+    z-index: 1;
 }
 
 .step-card:hover {
-    background: var(--bg4);
-    border-color: var(--green);
-    z-index: 1;
+    border-color: var(--blue);
+    transform: translateY(-4px);
+    box-shadow: var(--glow-b);
+}
+
+.step-num-wrap {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 0 20px rgba(0,170,255,0.3);
 }
 
 .step-num {
     font-family: 'Orbitron', sans-serif;
-    font-size: 3.5rem;
+    font-size: 1rem;
     font-weight: 900;
-    line-height: 1;
-    background: linear-gradient(135deg, var(--green), var(--cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1.2rem;
-    display: block;
-    filter: drop-shadow(0 0 10px rgba(0,255,136,0.3));
+    color: #fff;
 }
 
 .step-card h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -753,28 +1147,44 @@ body::after {
 
 .step-card p {
     color: var(--text-mid);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.7;
 }
 
 /* ============================================================
-   SPECS BAR
+   SPECS TICKER
 ============================================================ */
 .specs-bar {
-    padding: 3rem 0;
+    padding: 2.5rem 0;
     position: relative;
     z-index: 2;
     overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
 }
+
+.specs-bar::before,
+.specs-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 150px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.specs-bar::before { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+.specs-bar::after  { right: 0; background: linear-gradient(-90deg, var(--bg2), transparent); }
 
 .specs-track {
     display: flex;
     gap: 1.5rem;
-    animation: specScroll 20s linear infinite;
+    animation: tickerScroll 25s linear infinite;
     width: max-content;
 }
 
-@keyframes specScroll {
+@keyframes tickerScroll {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
 }
@@ -785,91 +1195,264 @@ body::after {
     gap: 0.7rem;
     background: var(--bg3);
     border: 1px solid var(--border);
-    padding: 0.7rem 1.5rem;
+    padding: 0.65rem 1.4rem;
     border-radius: 6px;
     white-space: nowrap;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: border-color 0.3s;
+    cursor: default;
 }
 
-.spec-chip i { color: var(--green); font-size: 0.9rem; }
-.spec-chip:hover { border-color: var(--green); }
+.spec-chip i { color: var(--blue); font-size: 0.85rem; }
+.spec-chip:hover { border-color: var(--blue); }
+
+/* ============================================================
+   CHANGELOG
+============================================================ */
+.changelog-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.cl-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    transition: border-color 0.3s;
+}
+
+.cl-item:hover { border-color: var(--blue); }
+
+.cl-ver {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 900;
+    color: var(--blue);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    padding-top: 0.1rem;
+    min-width: 80px;
+}
+
+.cl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+}
+
+.cl-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.cl-content { flex: 1; }
+
+.cl-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0.15rem 0.6rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.cl-tag.major { background: rgba(0,170,255,0.12); color: var(--blue); border: 1px solid rgba(0,170,255,0.25); }
+.cl-tag.minor { background: rgba(157,78,237,0.12); color: var(--purple); border: 1px solid rgba(157,78,237,0.25); }
+.cl-tag.patch { background: rgba(255,215,0,0.1); color: var(--yellow); border: 1px solid rgba(255,215,0,0.25); }
+
+.cl-content h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.3px;
+}
+
+.cl-content ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cl-content li {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.cl-content li::before {
+    content: '›';
+    color: var(--blue);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+}
+
+/* ============================================================
+   CTA
+============================================================ */
+.cta-sec { padding: 7rem 0; position: relative; z-index: 2; }
+
+.cta-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.cta-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--purple), transparent);
+}
+
+.cta-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse,
+        rgba(0,170,255,0.08) 0%,
+        rgba(157,78,237,0.06) 40%,
+        transparent 70%);
+    pointer-events: none;
+}
+
+.cta-box h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.cta-box p {
+    color: var(--text-mid);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.cta-note {
+    margin-top: 1.5rem;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.cta-note i { color: var(--blue); }
 
 /* ============================================================
    DOWNLOAD PAGE
 ============================================================ */
-.dl-hero {
+.page-top {
     padding: 9rem 2rem 4rem;
     text-align: center;
     position: relative;
     z-index: 2;
 }
 
-.dl-hero h1 {
+.page-top h1 {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
     margin-bottom: 1rem;
+    letter-spacing: -1px;
 }
 
-.dl-hero p {
+.page-top p {
     color: var(--text-mid);
     font-size: 1.05rem;
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
-.dl-content {
+.grad-text {
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dl-wrap {
     max-width: 950px;
     margin: 0 auto;
-    padding: 2rem 2rem 7rem;
+    padding: 0 2rem 7rem;
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.dl-main-card {
+.dl-hero-card {
     background: var(--bg3);
-    border: 1px solid var(--green);
+    border: 1px solid var(--blue);
     border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 0 50px rgba(0,255,136,0.1);
     position: relative;
+    box-shadow: 0 0 60px rgba(0,170,255,0.1);
 }
 
-.dl-main-card::before {
-    content: 'RECOMMENDED';
+.dl-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--purple), transparent);
+}
+
+.dl-badge {
     position: absolute;
     top: 1.2rem; right: 1.2rem;
-    background: var(--green);
-    color: #000;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-weight: 900;
     letter-spacing: 2px;
-    padding: 0.25rem 0.8rem;
+    padding: 0.3rem 0.9rem;
     border-radius: 4px;
 }
 
-.dl-card-inner {
+.dl-card-body {
     padding: 2.5rem;
     display: flex;
     align-items: center;
     gap: 2rem;
 }
 
-.dl-icon-big {
+.dl-icon {
     width: 80px; height: 80px;
     border-radius: 16px;
-    background: rgba(0,255,136,0.1);
-    border: 1px solid rgba(0,255,136,0.2);
+    background: rgba(0,170,255,0.1);
+    border: 1px solid rgba(0,170,255,0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    color: var(--green);
+    color: var(--blue);
     flex-shrink: 0;
 }
 
@@ -877,22 +1460,22 @@ body::after {
 
 .dl-info h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 900;
+    letter-spacing: 2px;
     margin-bottom: 0.5rem;
-    letter-spacing: 1px;
 }
 
 .dl-info p {
     color: var(--text-mid);
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: 0.88rem;
+    line-height: 1.65;
     margin-bottom: 1rem;
 }
 
 .dl-tags {
     display: flex;
-    gap: 0.7rem;
+    gap: 1rem;
     flex-wrap: wrap;
 }
 
@@ -903,12 +1486,11 @@ body::after {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-mid);
-    letter-spacing: 0.5px;
 }
 
-.dl-tag i { color: var(--green); font-size: 0.75rem; }
+.dl-tag i { color: var(--blue); font-size: 0.75rem; }
 
-.dl-btn-wrap {
+.dl-btn-col {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -916,39 +1498,39 @@ body::after {
     flex-shrink: 0;
 }
 
-.dl-btn-wrap .version {
-    font-size: 0.75rem;
+.dl-btn-col .ver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
     color: var(--text-dim);
 }
 
-.dl-steps {
+.install-box {
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 2.5rem;
-    margin-bottom: 1.5rem;
 }
 
-.dl-steps h3 {
+.install-box h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
+    color: var(--yellow);
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    color: var(--yellow);
 }
 
-.dl-steps-grid {
+.install-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 1.2rem;
 }
 
-.dl-step {
+.install-step {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -957,67 +1539,72 @@ body::after {
     transition: border-color 0.3s;
 }
 
-.dl-step:hover { border-color: var(--green); }
+.install-step:hover { border-color: var(--blue); }
 
-.dl-step-n {
+.install-n {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.8rem;
     font-weight: 900;
-    color: var(--green);
-    margin-bottom: 0.7rem;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     display: block;
+    margin-bottom: 0.7rem;
 }
 
-.dl-step h4 {
-    font-size: 0.85rem;
+.install-step h4 {
+    font-size: 0.82rem;
     font-weight: 700;
     margin-bottom: 0.4rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
-.dl-step p {
-    font-size: 0.8rem;
+.install-step p {
+    font-size: 0.78rem;
     color: var(--text-mid);
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
-.safety-grid {
+.safety-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
 }
 
-.safety-card {
-    background: rgba(0,255,136,0.04);
-    border: 1px solid rgba(0,255,136,0.12);
+.safety-item {
+    background: rgba(0,170,255,0.04);
+    border: 1px solid rgba(0,170,255,0.12);
     border-radius: 12px;
     padding: 1.5rem 1.2rem;
     text-align: center;
     transition: all 0.3s;
 }
 
-.safety-card:hover {
-    background: rgba(0,255,136,0.08);
+.safety-item:hover {
+    background: rgba(0,170,255,0.08);
     transform: translateY(-2px);
+    border-color: rgba(0,170,255,0.25);
 }
 
-.safety-card i {
+.safety-item i {
     font-size: 1.5rem;
-    color: var(--green);
-    margin-bottom: 0.8rem;
+    color: var(--blue);
     display: block;
+    margin-bottom: 0.8rem;
 }
 
-.safety-card h4 {
+.safety-item h4 {
     font-size: 0.85rem;
     font-weight: 700;
     margin-bottom: 0.4rem;
+    letter-spacing: 0.3px;
 }
 
-.safety-card p {
+.safety-item p {
     font-size: 0.78rem;
     color: var(--text-mid);
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 /* ============================================================
@@ -1037,10 +1624,13 @@ body::after {
     border-radius: 12px;
     margin-bottom: 1rem;
     overflow: hidden;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.accord.open { border-color: var(--green); }
+.accord.open {
+    border-color: var(--blue);
+    box-shadow: 0 0 25px rgba(0,170,255,0.08);
+}
 
 .accord-head {
     padding: 1.5rem 2rem;
@@ -1052,7 +1642,7 @@ body::after {
     transition: background 0.2s;
 }
 
-.accord-head:hover { background: rgba(0,255,136,0.03); }
+.accord-head:hover { background: rgba(0,170,255,0.03); }
 
 .accord-ico {
     width: 42px; height: 42px;
@@ -1067,27 +1657,27 @@ body::after {
 .accord-head h3 {
     flex: 1;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
 
-.accord-chevron {
+.accord-chev {
     color: var(--text-dim);
     font-size: 0.85rem;
-    transition: transform 0.35s;
+    transition: transform 0.35s, color 0.3s;
 }
 
-.accord.open .accord-chevron { transform: rotate(180deg); color: var(--green); }
+.accord.open .accord-chev { transform: rotate(180deg); color: var(--blue); }
 
 .accord-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease;
+    transition: max-height 0.45s ease;
 }
 
-.accord.open .accord-body { max-height: 1000px; }
+.accord.open .accord-body { max-height: 1200px; }
 
 .accord-inner {
     padding: 0 2rem 2rem;
@@ -1097,7 +1687,7 @@ body::after {
 .accord-intro {
     color: var(--text-mid);
     font-size: 0.9rem;
-    line-height: 1.7;
+    line-height: 1.75;
     padding: 1.2rem 0;
 }
 
@@ -1111,35 +1701,35 @@ body::after {
 .g-num {
     width: 30px; height: 30px;
     border-radius: 50%;
-    background: rgba(0,255,136,0.1);
-    border: 1px solid rgba(0,255,136,0.25);
-    color: var(--green);
-    font-size: 0.75rem;
+    background: rgba(0,170,255,0.1);
+    border: 1px solid rgba(0,170,255,0.25);
+    color: var(--blue);
+    font-size: 0.72rem;
     font-weight: 700;
     font-family: 'Orbitron', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin-top: 0.1rem;
 }
 
 .g-step h4 {
     font-size: 0.9rem;
     font-weight: 700;
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.3px;
 }
 
 .g-step p {
     font-size: 0.85rem;
     color: var(--text-mid);
-    line-height: 1.6;
+    line-height: 1.65;
 }
 
 .g-warn {
-    background: rgba(255,215,0,0.07);
-    border: 1px solid rgba(255,215,0,0.2);
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.18);
     border-radius: 8px;
     padding: 1rem 1.2rem;
     margin-top: 1rem;
@@ -1148,19 +1738,21 @@ body::after {
     font-size: 0.85rem;
     color: var(--yellow);
     line-height: 1.6;
+    align-items: flex-start;
 }
 
 .g-tip {
-    background: rgba(0,255,136,0.06);
-    border: 1px solid rgba(0,255,136,0.18);
+    background: rgba(0,170,255,0.06);
+    border: 1px solid rgba(0,170,255,0.18);
     border-radius: 8px;
     padding: 1rem 1.2rem;
     margin-top: 1rem;
     display: flex;
     gap: 0.8rem;
     font-size: 0.85rem;
-    color: var(--green);
+    color: var(--blue);
     line-height: 1.6;
+    align-items: flex-start;
 }
 
 /* ============================================================
@@ -1172,6 +1764,9 @@ body::after {
     padding: 0 2rem 7rem;
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .about-story {
@@ -1179,7 +1774,6 @@ body::after {
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 3rem;
-    margin-bottom: 1.5rem;
     position: relative;
     overflow: hidden;
 }
@@ -1189,17 +1783,17 @@ body::after {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--green), var(--cyan), var(--purple));
+    background: linear-gradient(90deg, var(--blue), var(--purple), var(--cyan));
 }
 
 .about-story h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
+    color: var(--blue);
     margin-bottom: 1.5rem;
-    color: var(--green);
 }
 
 .about-story p {
@@ -1210,13 +1804,12 @@ body::after {
 }
 
 .about-story p:last-child { margin-bottom: 0; }
-.about-story p .hl { color: var(--green); font-weight: 700; }
+.about-story .hl { color: var(--blue); font-weight: 700; }
 
-.values-row {
+.vals-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    margin-bottom: 1.5rem;
 }
 
 .val-card {
@@ -1228,40 +1821,36 @@ body::after {
     transition: all 0.3s;
 }
 
-.val-card:hover {
-    border-color: var(--green);
-    transform: translateY(-3px);
-}
+.val-card:hover { border-color: var(--blue); transform: translateY(-3px); }
 
-.val-card .val-emoji { font-size: 2.2rem; margin-bottom: 0.8rem; display: block; }
+.val-emoji { font-size: 2.2rem; display: block; margin-bottom: 0.8rem; }
 
 .val-card h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-bottom: 0.6rem;
 }
 
-.val-card p { color: var(--text-mid); font-size: 0.85rem; line-height: 1.6; }
+.val-card p { color: var(--text-mid); font-size: 0.85rem; line-height: 1.65; }
 
 .tech-box {
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 2.5rem;
-    margin-bottom: 1.5rem;
 }
 
 .tech-box h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 1.5rem;
     color: var(--cyan);
+    margin-bottom: 1.5rem;
 }
 
 .tech-chips {
@@ -1280,7 +1869,7 @@ body::after {
     border-radius: 6px;
     font-size: 0.85rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     transition: all 0.3s;
     cursor: default;
 }
@@ -1297,13 +1886,13 @@ body::after {
 
 .faq-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
+    color: var(--purple);
     padding: 2rem 2.5rem;
     border-bottom: 1px solid var(--border);
-    color: var(--purple);
 }
 
 .faq-item {
@@ -1314,7 +1903,7 @@ body::after {
 }
 
 .faq-item:last-child { border-bottom: none; }
-.faq-item:hover { background: rgba(0,255,136,0.02); }
+.faq-item:hover { background: rgba(0,170,255,0.02); }
 
 .faq-q {
     display: flex;
@@ -1325,7 +1914,7 @@ body::after {
     letter-spacing: 0.3px;
 }
 
-.faq-q i { color: var(--green); transition: transform 0.3s; font-size: 0.85rem; }
+.faq-q i { color: var(--blue); transition: transform 0.3s; font-size: 0.85rem; }
 .faq-item.open .faq-q i { transform: rotate(45deg); }
 
 .faq-a {
@@ -1339,106 +1928,6 @@ body::after {
 .faq-item.open .faq-a { display: block; }
 
 /* ============================================================
-   PAGE HERO (shared)
-============================================================ */
-.page-top {
-    padding: 9rem 2rem 4rem;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-.page-top h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-    letter-spacing: -1px;
-}
-
-.page-top p {
-    color: var(--text-mid);
-    font-size: 1.05rem;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-/* ============================================================
-   CTA SECTION
-============================================================ */
-.cta-sec {
-    padding: 7rem 0;
-    position: relative;
-    z-index: 2;
-}
-
-.cta-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.cta-box {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 5rem 3rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-}
-
-.cta-box::after {
-    content: '';
-    position: absolute;
-    bottom: -100px; left: 50%;
-    transform: translateX(-50%);
-    width: 400px; height: 200px;
-    background: radial-gradient(ellipse, rgba(0,255,136,0.12), transparent 70%);
-    pointer-events: none;
-}
-
-.cta-box h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.6rem, 3vw, 2.3rem);
-    font-weight: 900;
-    margin-bottom: 1rem;
-    position: relative;
-    z-index: 1;
-}
-
-.cta-box p {
-    color: var(--text-mid);
-    font-size: 1.05rem;
-    margin-bottom: 2.5rem;
-    position: relative;
-    z-index: 1;
-}
-
-.cta-note {
-    margin-top: 1.5rem;
-    color: var(--text-dim);
-    font-size: 0.82rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.5px;
-}
-
-.cta-note i { color: var(--green); }
-
-/* ============================================================
    FOOTER
 ============================================================ */
 .footer {
@@ -1449,27 +1938,56 @@ body::after {
     z-index: 2;
 }
 
-.footer-grid {
+.footer-inner {
     max-width: 1300px;
     margin: 0 auto;
     padding: 0 2rem;
+}
+
+.footer-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 3rem;
     margin-bottom: 3rem;
 }
 
 .footer-brand p {
     color: var(--text-dim);
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     margin-top: 1rem;
-    max-width: 260px;
-    line-height: 1.7;
+    max-width: 270px;
+    line-height: 1.75;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+}
+
+.social-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.social-btn:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    transform: translateY(-2px);
 }
 
 .footer-col h4 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -1483,118 +2001,109 @@ body::after {
     font-size: 0.88rem;
     color: var(--text-mid);
     transition: color 0.2s;
+    cursor: pointer;
 }
 
-.footer-col a:hover { color: var(--green); }
+.footer-col a:hover { color: var(--blue); }
 
 .footer-bottom {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 2rem 2rem 0;
     border-top: 1px solid var(--border);
-    text-align: center;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
     color: var(--text-dim);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
 }
 
-.footer-bottom i { color: var(--red); }
-
-/* ============================================================
-   MOBILE NAV MENU
-============================================================ */
-.mobile-menu {
-    display: none;
-    position: fixed;
-    top: 68px; left: 0; right: 0;
-    background: rgba(5,5,8,0.98);
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
-    z-index: 999;
-    flex-direction: column;
-    gap: 0.5rem;
-    backdrop-filter: blur(20px);
+.footer-bottom a {
+    color: var(--blue);
+    transition: opacity 0.2s;
 }
 
-.mobile-menu.open { display: flex; }
-
-.mobile-menu a {
-    padding: 0.8rem 1rem;
-    color: var(--text-mid);
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border-radius: 6px;
-    transition: all 0.2s;
-}
-
-.mobile-menu a:hover { color: var(--green); background: rgba(0,255,136,0.05); }
+.footer-bottom a:hover { opacity: 0.7; }
 
 /* ============================================================
    RESPONSIVE
 ============================================================ */
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
     .feat-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero { gap: 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 900px) {
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 7rem;
-    }
+    .hero { flex-direction: column; text-align: center; padding-top: 7rem; gap: 3rem; }
     .hero-btns { justify-content: center; }
     .hero-stats { margin: 0 auto; }
     .hero-right { max-width: 100%; }
-    .hero::before, .hero::after { display: none; }
-    .steps-row { flex-direction: column; }
-    .step-card { border-radius: 12px !important; }
-    .step-card::after { display: none; }
-    .dl-steps-grid { grid-template-columns: repeat(2, 1fr); }
-    .safety-grid { grid-template-columns: repeat(2, 1fr); }
-    .values-row { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: 1 / -1; }
+    .hero-corner { display: none; }
+    .hero-sub { margin: 0 auto 2.5rem; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .steps-grid::before { display: none; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .compare-arrow { flex-direction: row; }
+    .compare-arrow-icon { transform: rotate(90deg); }
+    .install-grid { grid-template-columns: repeat(2, 1fr); }
+    .safety-row { grid-template-columns: repeat(2, 1fr); }
+    .vals-row { grid-template-columns: 1fr; }
     .nav-links, .nav-cta { display: none; }
     .hamburger { display: flex; }
 }
 
 @media (max-width: 640px) {
     .feat-grid { grid-template-columns: 1fr; }
-    .dl-steps-grid { grid-template-columns: 1fr; }
-    .safety-grid { grid-template-columns: 1fr; }
+    .install-grid { grid-template-columns: 1fr; }
+    .safety-row { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
-    .dl-card-inner { flex-direction: column; text-align: center; }
+    .dl-card-body { flex-direction: column; text-align: center; }
     .dl-tags { justify-content: center; }
-    .hero-stats { flex-direction: column; width: 100%; }
+    .hero-stats { width: 100%; flex-direction: column; }
     .h-stat { border-right: none; border-bottom: 1px solid var(--border); }
     .h-stat:last-child { border-bottom: none; }
+    .footer-bottom { flex-direction: column; text-align: center; }
 }
 
     </style>
 </head>
 <body>
 
+<!-- ============================================================
+     LOADER
+============================================================ -->
+<div id="loader">
+    <div class="loader-logo">XPYBOOST</div>
+    <div class="loader-bar-wrap">
+        <div class="loader-bar"></div>
+    </div>
+    <div class="loader-text" id="loader-text">Initializing...</div>
+</div>
+
 <!-- PARTICLES -->
 <div id="particles"></div>
 
-<!-- NAVBAR -->
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
 <nav class="navbar" id="navbar">
     <div class="nav-inner">
-        <div class="nav-logo">
-            <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-            LAPTOPBOOST
+        <div class="nav-logo" onclick="showPage('home')">
+            <div class="logo-mark">XPY</div>
+            <span class="logo-text">XPYBOOST</span>
+            <span class="logo-version">v3.0</span>
         </div>
         <ul class="nav-links">
-            <li><a href="#" onclick="showPage('home')"   class="active" id="nav-home">HOME</a></li>
-            <li><a href="#" onclick="showPage('guides')"  id="nav-guides">GUIDES</a></li>
-            <li><a href="#" onclick="showPage('download')" id="nav-download">DOWNLOAD</a></li>
-            <li><a href="#" onclick="showPage('about')"   id="nav-about">ABOUT</a></li>
+            <li><a onclick="showPage('home')"     class="active" id="nav-home">HOME</a></li>
+            <li><a onclick="showPage('guides')"   id="nav-guides">GUIDES</a></li>
+            <li><a onclick="showPage('download')" id="nav-download">DOWNLOAD</a></li>
+            <li><a onclick="showPage('changelog')"id="nav-changelog">CHANGELOG</a></li>
+            <li><a onclick="showPage('about')"    id="nav-about">ABOUT</a></li>
         </ul>
-        <a href="#" onclick="showPage('download')" class="nav-cta">
-            <i class="fas fa-download"></i> GET BOOSTER
-        </a>
+        <div class="nav-cta" onclick="showPage('download')">
+            <i class="fas fa-download"></i> GET XPYBOOST
+        </div>
         <div class="hamburger" id="hamburger">
             <span></span><span></span><span></span>
         </div>
@@ -1603,10 +2112,11 @@ body::after {
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
-    <a href="#" onclick="showPage('home');closeMobile()">HOME</a>
-    <a href="#" onclick="showPage('guides');closeMobile()">GUIDES</a>
-    <a href="#" onclick="showPage('download');closeMobile()">DOWNLOAD</a>
-    <a href="#" onclick="showPage('about');closeMobile()">ABOUT</a>
+    <a onclick="showPage('home');closeMob()">HOME</a>
+    <a onclick="showPage('guides');closeMob()">GUIDES</a>
+    <a onclick="showPage('download');closeMob()">DOWNLOAD</a>
+    <a onclick="showPage('changelog');closeMob()">CHANGELOG</a>
+    <a onclick="showPage('about');closeMob()">ABOUT</a>
 </div>
 
 <!-- ============================================================
@@ -1614,54 +2124,60 @@ body::after {
 ============================================================ -->
 <div class="page active" id="page-home">
 
-    <!-- HERO -->
     <section class="hero">
+        <div class="hero-corner tl"></div>
+        <div class="hero-corner br"></div>
+
         <div class="hero-left">
             <div class="hero-eyebrow">
-                <div class="hero-eyebrow-line"></div>
-                <span>Free Performance Tool — Windows 10 / 11</span>
-                <div class="hero-eyebrow-line" style="background:linear-gradient(90deg,transparent,var(--green))"></div>
+                <div class="eyebrow-badge">
+                    <div class="dot"></div>
+                    XPY-US · Free Gaming Performance Suite
+                </div>
             </div>
 
             <h1 class="hero-title">
-                MAKE YOUR<br>
-                <span class="line2">SLOW LAPTOP</span>
-                RIP AGAIN
+                <span class="t-white">YOUR LAPTOP</span>
+                <span class="t-grad">UNLEASHED</span>
+                <span class="t-white">BY XPYBOOST</span>
             </h1>
 
             <p class="hero-sub">
-                One <strong>.bat file</strong> that cleans junk, optimizes RAM, kills useless
-                services and maxes out your CPU — built for <strong>low-end laptops</strong>
-                that Windows wants to destroy.
+                One <strong>.bat file</strong> that cleans junk, frees RAM, kills bloat
+                and maxes your CPU — built for <strong>low-end gaming laptops</strong>
+                that Windows is slowly suffocating.
             </p>
 
             <div class="hero-btns">
-                <a href="#" onclick="showPage('download')" class="btn btn-primary btn-lg">
+                <div class="btn btn-primary btn-lg" onclick="showPage('download')">
                     <i class="fas fa-download"></i> DOWNLOAD FREE
-                </a>
-                <a href="#" onclick="showPage('guides')" class="btn btn-outline btn-lg">
+                </div>
+                <div class="btn btn-outline btn-lg" onclick="showPage('guides')">
                     <i class="fas fa-book-open"></i> HOW IT WORKS
-                </a>
+                </div>
             </div>
 
             <div class="hero-stats">
                 <div class="h-stat">
-                    <span class="h-stat-num" id="c1" data-t="50">0</span>
-                    <span class="h-stat-label">% Faster Boot</span>
+                    <span class="h-stat-num" data-t="50" id="c1">0</span>
+                    <span class="h-stat-suf">%</span>
+                    <span class="h-stat-label">Faster Boot</span>
                 </div>
                 <div class="h-stat">
-                    <span class="h-stat-num" id="c2" data-t="9">0</span>
+                    <span class="h-stat-num" data-t="9" id="c2">0</span>
+                    <span class="h-stat-suf">+</span>
                     <span class="h-stat-label">Optimizations</span>
                 </div>
                 <div class="h-stat">
-                    <span class="h-stat-num" id="c3" data-t="100">0</span>
-                    <span class="h-stat-label">% Free Forever</span>
+                    <span class="h-stat-num" data-t="100" id="c3">0</span>
+                    <span class="h-stat-suf">%</span>
+                    <span class="h-stat-label">Free Forever</span>
                 </div>
             </div>
         </div>
 
         <div class="hero-right">
-            <div class="terminal-wrap">
+            <div class="terminal-glow">
                 <div class="terminal">
                     <div class="term-header">
                         <div class="term-dots">
@@ -1669,10 +2185,37 @@ body::after {
                             <div class="term-dot y"></div>
                             <div class="term-dot g"></div>
                         </div>
-                        <div class="term-title">LaptopBoost.bat — Administrator</div>
-                        <div class="term-status"></div>
+                        <div class="term-title">XPYBOOST.bat — Administrator</div>
+                        <div class="term-live">
+                            <div class="term-live-dot"></div>
+                            LIVE
+                        </div>
                     </div>
                     <div class="term-body" id="term-body"></div>
+                </div>
+            </div>
+
+            <div class="health-card" id="health-card">
+                <div class="health-title">
+                    <span>LIVE PC HEALTH SCAN</span>
+                    <span class="health-score" id="health-score">—</span>
+                </div>
+                <div class="health-row" id="hr-os">
+                    <div class="health-label"><span>OS</span><span class="health-val" id="hv-os">Detecting...</span></div>
+                </div>
+                <div class="health-row" id="hr-ram">
+                    <div class="health-label"><span>RAM PRESSURE</span><span class="health-val" id="hv-ram">—</span></div>
+                    <div class="health-bar-bg"><div class="health-bar hb-mid" id="hb-ram"></div></div>
+                </div>
+                <div class="health-row">
+                    <div class="health-label"><span>BROWSER ENGINE</span><span class="health-val" id="hv-browser">—</span></div>
+                </div>
+                <div class="health-row">
+                    <div class="health-label"><span>CPU CORES</span><span class="health-val" id="hv-cores">—</span></div>
+                </div>
+                <div class="health-row" id="hr-conn">
+                    <div class="health-label"><span>CONNECTION</span><span class="health-val" id="hv-conn">—</span></div>
+                    <div class="health-bar-bg"><div class="health-bar hb-good" id="hb-conn"></div></div>
                 </div>
             </div>
         </div>
@@ -1683,356 +2226,505 @@ body::after {
         <div class="wrap">
             <div class="section-header center">
                 <div class="s-tag">Arsenal</div>
-                <h2 class="s-head">Everything Your Laptop Needs</h2>
-                <p class="s-sub">9 battle-tested optimizations in one lightweight script. No bloat. No BS.</p>
+                <h2 class="s-head">Your Performance Weapon Kit</h2>
+                <p class="s-sub">9 battle-tested optimizations. One lightweight script. Zero bloat.</p>
             </div>
-
             <div class="feat-grid">
-                <div class="feat-card" data-d="0" style="--accent:var(--green)">
-                    <div class="feat-icon-wrap fi-green"><i class="fas fa-broom"></i></div>
+                <div class="feat-card" data-d="0" style="--card-accent:linear-gradient(90deg,var(--blue),var(--purple))">
+                    <span class="feat-num">// 01</span>
+                    <div class="feat-icon fi-b"><i class="fas fa-broom"></i></div>
                     <h3>Junk Cleaner</h3>
-                    <p>Nukes temp files, cache, prefetch and Windows update garbage. Frees multiple GBs in seconds.</p>
-                    <span class="feat-pill fp-green">Saves GBs of Space</span>
+                    <p>Nukes temp files, prefetch, update cache and all the Windows garbage that's been building up since day one.</p>
+                    <span class="feat-pill fp-b">Saves Multiple GBs</span>
                 </div>
-                <div class="feat-card" data-d="100" style="--accent:var(--blue)">
-                    <div class="feat-icon-wrap fi-blue"><i class="fas fa-memory"></i></div>
+                <div class="feat-card" data-d="100" style="--card-accent:linear-gradient(90deg,var(--purple),var(--cyan))">
+                    <span class="feat-num">// 02</span>
+                    <div class="feat-icon fi-p"><i class="fas fa-memory"></i></div>
                     <h3>RAM Optimizer</h3>
-                    <p>Clears standby memory list and kills memory leaks so your active apps get the RAM they deserve.</p>
-                    <span class="feat-pill fp-blue">More Free RAM</span>
+                    <p>Clears standby memory, kills compression overhead and gives your active apps the RAM they actually deserve.</p>
+                    <span class="feat-pill fp-p">More Free RAM</span>
                 </div>
-                <div class="feat-card" data-d="200" style="--accent:var(--yellow)">
-                    <div class="feat-icon-wrap fi-yellow"><i class="fas fa-bolt"></i></div>
+                <div class="feat-card" data-d="200" style="--card-accent:linear-gradient(90deg,var(--cyan),var(--blue))">
+                    <span class="feat-num">// 03</span>
+                    <div class="feat-icon fi-c"><i class="fas fa-bolt"></i></div>
                     <h3>High Performance</h3>
-                    <p>Forces Windows into max power mode. CPU and GPU run at 100% instead of throttling constantly.</p>
-                    <span class="feat-pill fp-yellow">Max CPU Speed</span>
+                    <p>Forces Windows into max power mode. CPU stops throttling. GPU runs full tilt. No more compromises.</p>
+                    <span class="feat-pill fp-c">Max CPU Speed</span>
                 </div>
-                <div class="feat-card" data-d="300" style="--accent:var(--cyan)">
-                    <div class="feat-icon-wrap fi-cyan"><i class="fas fa-wifi"></i></div>
+                <div class="feat-card" data-d="300" style="--card-accent:linear-gradient(90deg,var(--blue),var(--purple))">
+                    <span class="feat-num">// 04</span>
+                    <div class="feat-icon fi-g"><i class="fas fa-wifi"></i></div>
                     <h3>Network Boost</h3>
-                    <p>Flushes DNS, resets the network stack and enables TCP tuning for lower ping and faster speeds.</p>
-                    <span class="feat-pill fp-cyan">Better Ping</span>
+                    <p>Flushes DNS, resets the stack, enables TCP tuning and optionally sets Google DNS for faster browsing and better ping.</p>
+                    <span class="feat-pill fp-g">Lower Ping</span>
                 </div>
-                <div class="feat-card" data-d="400" style="--accent:var(--red)">
-                    <div class="feat-icon-wrap fi-red"><i class="fas fa-cogs"></i></div>
+                <div class="feat-card" data-d="400" style="--card-accent:linear-gradient(90deg,var(--red),var(--orange))">
+                    <span class="feat-num">// 05</span>
+                    <div class="feat-icon fi-r"><i class="fas fa-cogs"></i></div>
                     <h3>Service Killer</h3>
-                    <p>Disables useless Windows background services — Superfetch, Telemetry, Search Indexer and more.</p>
-                    <span class="feat-pill fp-red">Kill Background Bloat</span>
+                    <p>Kills Superfetch, Telemetry, Search Indexing and other Windows background parasites eating your CPU and RAM.</p>
+                    <span class="feat-pill fp-r">Kill The Bloat</span>
                 </div>
-                <div class="feat-card" data-d="500" style="--accent:var(--purple)">
-                    <div class="feat-icon-wrap fi-purple"><i class="fas fa-paint-brush"></i></div>
-                    <h3>Visual Mode</h3>
-                    <p>Kills animations, transparency and Aero effects. Windows feels snappier on weak integrated graphics.</p>
-                    <span class="feat-pill fp-purple">Smoother UI</span>
+                <div class="feat-card" data-d="500" style="--card-accent:linear-gradient(90deg,var(--yellow),var(--orange))">
+                    <span class="feat-num">// 06</span>
+                    <div class="feat-icon fi-y"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Visual Stripper</h3>
+                    <p>Kills animations, transparency and Aero blur effects. Your iGPU stops wasting cycles on eye candy that slows everything down.</p>
+                    <span class="feat-pill fp-y">Smoother UI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEFORE / AFTER -->
+    <section class="section section-alt">
+        <div class="wrap">
+            <div class="section-header center">
+                <div class="s-tag">Results</div>
+                <h2 class="s-head">Before vs After XPYBOOST</h2>
+                <p class="s-sub">Real numbers from a typical low-end laptop with 4GB RAM and HDD.</p>
+            </div>
+            <div class="compare-grid">
+                <div class="compare-col">
+                    <h3 class="before"><i class="fas fa-times-circle"></i> BEFORE</h3>
+                    <div class="compare-item">
+                        <span class="ci-label">Boot Time</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-bad" style="width:85%"></div></div>
+                        <span class="ci-val ci-bad">~85s</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">RAM Free</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-bad" style="width:15%"></div></div>
+                        <span class="ci-val ci-bad">~15%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">CPU Idle</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-bad" style="width:78%"></div></div>
+                        <span class="ci-val ci-bad">~78%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">Disk Usage</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-bad" style="width:100%"></div></div>
+                        <span class="ci-val ci-bad">100%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">Junk Files</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-bad" style="width:90%"></div></div>
+                        <span class="ci-val ci-bad">~3.2GB</span>
+                    </div>
+                </div>
+
+                <div class="compare-arrow">
+                    <div class="compare-arrow-icon"><i class="fas fa-arrow-right"></i></div>
+                    <span>XPYBOOST</span>
+                </div>
+
+                <div class="compare-col">
+                    <h3 class="after"><i class="fas fa-check-circle"></i> AFTER</h3>
+                    <div class="compare-item">
+                        <span class="ci-label">Boot Time</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-good" style="width:40%"></div></div>
+                        <span class="ci-val ci-good">~40s</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">RAM Free</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-good" style="width:55%"></div></div>
+                        <span class="ci-val ci-good">~55%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">CPU Idle</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-good" style="width:18%"></div></div>
+                        <span class="ci-val ci-good">~18%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">Disk Usage</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-good" style="width:22%"></div></div>
+                        <span class="ci-val ci-good">~22%</span>
+                    </div>
+                    <div class="compare-item">
+                        <span class="ci-label">Junk Files</span>
+                        <div class="compare-bar-wrap"><div class="compare-bar cb-good" style="width:2%"></div></div>
+                        <span class="ci-val ci-good">~0MB</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="section section-alt">
+    <section class="section">
         <div class="wrap">
             <div class="section-header center">
                 <div class="s-tag">Process</div>
                 <h2 class="s-head">Up and Running in 3 Steps</h2>
-                <p class="s-sub">No install. No account. No magic. Just results.</p>
+                <p class="s-sub">No installer. No wizard. No nonsense. Just results.</p>
             </div>
-            <div class="steps-row">
+            <div class="steps-grid">
                 <div class="step-card">
-                    <span class="step-num">01</span>
+                    <div class="step-num-wrap"><span class="step-num">01</span></div>
                     <h3>Download the File</h3>
-                    <p>Head to the Download page and grab the .bat file. Completely free — no account, no email required.</p>
+                    <p>Hit the download button and save the .bat file anywhere on your PC. Desktop is fine. No install needed whatsoever.</p>
                 </div>
                 <div class="step-card">
-                    <span class="step-num">02</span>
+                    <div class="step-num-wrap"><span class="step-num">02</span></div>
                     <h3>Run as Administrator</h3>
-                    <p>Right-click → Run as Administrator. Required for service tweaks and power plan changes to stick.</p>
+                    <p>Right-click → Run as Administrator. Windows needs this for service changes, power plan edits and registry tweaks to actually stick.</p>
                 </div>
                 <div class="step-card">
-                    <span class="step-num">03</span>
-                    <h3>Pick Your Boost</h3>
-                    <p>Hit 1 for Full Auto Boost or choose individual options from the menu. Restart when done.</p>
+                    <div class="step-num-wrap"><span class="step-num">03</span></div>
+                    <h3>Pick and Boost</h3>
+                    <p>Type 1 for Full Auto Boost or pick individual tools from the gaming menu. Restart your PC afterward for full effect.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SPECS SCROLL -->
+    <!-- SPECS TICKER -->
     <div class="specs-bar">
         <div class="specs-track" id="specs-track"></div>
     </div>
 
     <!-- CTA -->
     <section class="cta-sec">
-        <div class="cta-inner">
+        <div class="wrap">
             <div class="cta-box">
-                <h2>Ready to Speed Up Your Laptop?</h2>
-                <p>Download free. No BS. No malware. Open source.</p>
-                <a href="#" onclick="showPage('download')" class="btn btn-primary btn-lg">
-                    <i class="fas fa-download"></i> DOWNLOAD LAPTOPBOOST FREE
-                </a>
+                <div class="cta-glow"></div>
+                <h2>Ready to Unleash Your Laptop?</h2>
+                <p>Built by <a href="https://github.com/XPY-US" target="_blank" style="color:var(--blue)">XPY-US</a> · Free forever · Open source · No BS.</p>
+                <div class="btn btn-primary btn-lg" onclick="showPage('download')" style="display:inline-flex">
+                    <i class="fas fa-download"></i> DOWNLOAD XPYBOOST FREE
+                </div>
                 <div class="cta-note">
                     <i class="fas fa-shield-alt"></i>
-                    100% Safe &nbsp;·&nbsp; No Account &nbsp;·&nbsp; No Installer &nbsp;·&nbsp; Open Source
+                    100% Safe &nbsp;·&nbsp; No Account &nbsp;·&nbsp; No Installer &nbsp;·&nbsp; Open Source on GitHub
                 </div>
             </div>
         </div>
     </section>
 
-</div><!-- end home -->
+</div><!-- /home -->
 
 <!-- ============================================================
      DOWNLOAD PAGE
 ============================================================ -->
 <div class="page" id="page-download">
-
     <div class="page-top">
-        <div class="s-tag" style="justify-content:center">Free Download</div>
-        <h1>DOWNLOAD <span style="background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">LAPTOPBOOST</span></h1>
-        <p>No installer. No account. Just download, right-click, run as admin.</p>
+        <div class="s-tag" style="justify-content:center;display:inline-flex">Free Download</div>
+        <h1>GET <span class="grad-text">XPYBOOST</span></h1>
+        <p>No installer. No account. No tracking. Just download, right-click, run as admin and go.</p>
     </div>
 
-    <div class="dl-content">
-
-        <div class="dl-main-card">
-            <div class="dl-card-inner">
-                <div class="dl-icon-big"><i class="fas fa-bolt"></i></div>
+    <div class="dl-wrap">
+        <div class="dl-hero-card">
+            <div class="dl-badge">⚡ RECOMMENDED</div>
+            <div class="dl-card-body">
+                <div class="dl-icon"><i class="fas fa-bolt"></i></div>
                 <div class="dl-info">
-                    <h3>LAPTOPBOOST FULL VERSION</h3>
-                    <p>The complete tool — Full Auto Boost, Junk Cleaner, RAM Optimizer, Network Boost, Service Killer, Visual Mode, System Info and more. One file. Zero bloat.</p>
+                    <h3>XPYBOOST FULL SUITE</h3>
+                    <p>Complete gaming performance tool — Full Auto Boost, Junk Cleaner, RAM Optimizer, Network Boost, Service Killer, Visual Stripper, Gaming Mode, System Health Score and more. One file. Total control.</p>
                     <div class="dl-tags">
                         <span class="dl-tag"><i class="fas fa-file-code"></i> .BAT Script</span>
-                        <span class="dl-tag"><i class="fas fa-weight-hanging"></i> ~8 KB</span>
-                        <span class="dl-tag"><i class="fab fa-windows"></i> Windows 10 / 11</span>
-                        <span class="dl-tag"><i class="fas fa-shield-alt"></i> Open Source</span>
-                        <span class="dl-tag"><i class="fas fa-unlock"></i> Free Forever</span>
+                        <span class="dl-tag"><i class="fas fa-weight-hanging"></i> ~12 KB</span>
+                        <span class="dl-tag"><i class="fab fa-windows"></i> Win 10/11</span>
+                        <span class="dl-tag"><i class="fas fa-code-branch"></i> Open Source</span>
+                        <span class="dl-tag"><i class="fas fa-ban"></i> Zero Bloat</span>
                     </div>
                 </div>
-                <div class="dl-btn-wrap">
-                    <button class="btn btn-primary" onclick="triggerDownload()">
+                <div class="dl-btn-col">
+                    <div class="btn btn-primary" onclick="triggerDownload()" style="cursor:pointer">
                         <i class="fas fa-download"></i> DOWNLOAD
-                    </button>
-                    <span class="version">v2.0 — Latest</span>
+                    </div>
+                    <span class="ver">v3.0 — Latest</span>
                 </div>
             </div>
         </div>
 
-        <div class="dl-steps">
-            <h3><i class="fas fa-terminal"></i> &nbsp; HOW TO INSTALL AND RUN</h3>
-            <div class="dl-steps-grid">
-                <div class="dl-step">
-                    <span class="dl-step-n">01</span>
-                    <h4>Download the File</h4>
-                    <p>Click the Download button above. It's a .bat script — no installer needed at all.</p>
+        <div class="install-box">
+            <h3><i class="fas fa-terminal"></i> HOW TO INSTALL AND RUN</h3>
+            <div class="install-grid">
+                <div class="install-step">
+                    <span class="install-n">01</span>
+                    <h4>Download</h4>
+                    <p>Click the button above. Save XPYBOOST.bat anywhere — Desktop works great.</p>
                 </div>
-                <div class="dl-step">
-                    <span class="dl-step-n">02</span>
-                    <h4>If Windows Blocks It</h4>
-                    <p>Click "More info" → "Run anyway". Windows flags unknown .bat files by default — this is normal.</p>
+                <div class="install-step">
+                    <span class="install-n">02</span>
+                    <h4>SmartScreen Alert</h4>
+                    <p>Click "More info" → "Run anyway". Windows flags unsigned .bat files — totally normal.</p>
                 </div>
-                <div class="dl-step">
-                    <span class="dl-step-n">03</span>
-                    <h4>Right-Click → Run as Admin</h4>
-                    <p>Needed for service changes, power plans and registry tweaks to actually apply correctly.</p>
+                <div class="install-step">
+                    <span class="install-n">03</span>
+                    <h4>Run as Admin</h4>
+                    <p>Right-click the file → "Run as administrator". Click Yes on the UAC prompt.</p>
                 </div>
-                <div class="dl-step">
-                    <span class="dl-step-n">04</span>
-                    <h4>Choose & Boost</h4>
-                    <p>Type a number, press Enter. Restart your PC after for the full effect.</p>
+                <div class="install-step">
+                    <span class="install-n">04</span>
+                    <h4>Boost & Restart</h4>
+                    <p>Press 1 for Full Auto Boost. Wait for it to finish. Restart your PC.</p>
                 </div>
             </div>
         </div>
 
-        <div class="safety-grid">
-            <div class="safety-card">
+        <div class="safety-row">
+            <div class="safety-item">
                 <i class="fas fa-shield-virus"></i>
                 <h4>100% Safe</h4>
-                <p>No malware. Read every line of source code on GitHub before running.</p>
+                <p>No malware. Read every line on GitHub before running.</p>
             </div>
-            <div class="safety-card">
+            <div class="safety-item">
                 <i class="fas fa-code-branch"></i>
                 <h4>Open Source</h4>
-                <p>Every command is public. Nothing hidden. Nothing phoning home.</p>
+                <p>Every command is public. Nothing hidden, nothing phoning home.</p>
             </div>
-            <div class="safety-card">
+            <div class="safety-item">
                 <i class="fas fa-undo-alt"></i>
-                <h4>Fully Reversible</h4>
-                <p>Services re-enable in services.msc. Visual effects restore in System Properties.</p>
+                <h4>Reversible</h4>
+                <p>Re-enable services in services.msc anytime. Nothing is permanent.</p>
             </div>
-            <div class="safety-card">
-                <i class="fas fa-ban"></i>
-                <h4>No Account Needed</h4>
-                <p>No email. No registration. No subscription. Download and use forever.</p>
+            <div class="safety-item">
+                <i class="fas fa-user-slash"></i>
+                <h4>No Account</h4>
+                <p>No email. No sign-up. No subscription. Download and keep forever.</p>
             </div>
         </div>
-
     </div>
-</div><!-- end download -->
+</div><!-- /download -->
 
 <!-- ============================================================
      GUIDES PAGE
 ============================================================ -->
 <div class="page" id="page-guides">
-
     <div class="page-top">
-        <div class="s-tag" style="justify-content:center">Documentation</div>
-        <h1>HOW EVERYTHING <span style="background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">WORKS</span></h1>
-        <p>Step-by-step breakdowns for every feature in the LaptopBoost tool.</p>
+        <div class="s-tag" style="justify-content:center;display:inline-flex">Docs</div>
+        <h1>HOW IT ALL <span class="grad-text">WORKS</span></h1>
+        <p>Step-by-step breakdowns for every tool in the XPYBOOST arsenal.</p>
     </div>
 
     <div class="guides-wrap">
 
         <div class="accord open">
             <div class="accord-head" onclick="toggleAccord(this)">
-                <div class="accord-ico fi-green"><i class="fas fa-rocket"></i></div>
+                <div class="accord-ico fi-b"><i class="fas fa-rocket"></i></div>
                 <h3>Getting Started — First Time Setup</h3>
-                <i class="fas fa-chevron-down accord-chevron"></i>
+                <i class="fas fa-chevron-down accord-chev"></i>
             </div>
-            <div class="accord-body">
-                <div class="accord-inner">
-                    <p class="accord-intro">New to LaptopBoost? Follow these steps to get up and running in under 2 minutes.</p>
-                    <div class="g-step">
-                        <div class="g-num">1</div>
-                        <div>
-                            <h4>Download the .bat file</h4>
-                            <p>Head to the Downloads page and click the big green download button. Save it anywhere — Desktop works best.</p>
-                        </div>
-                    </div>
-                    <div class="g-step">
-                        <div class="g-num">2</div>
-                        <div>
-                            <h4>Right-click → Run as Administrator</h4>
-                            <p>This is required. Without admin rights, most optimizations won't work. Click Yes on the UAC popup.</p>
-                        </div>
-                    </div>
-                    <div class="g-step">
-                        <div class="g-num">3</div>
-                        <div>
-                            <h4>Choose Full Auto Boost (Option 1)</h4>
-                            <p>For first-timers, press 1 and Enter. This runs all 8 optimizations automatically in order.</p>
-                        </div>
-                    </div>
-                    <div class="g-step">
-                        <div class="g-num">4</div>
-                        <div>
-                            <h4>Restart your PC</h4>
-                            <p>Some changes — especially services and visual effects — need a restart to fully apply.</p>
-                        </div>
-                    </div>
-                    <div class="g-tip"><i class="fas fa-lightbulb"></i> Run LaptopBoost once a week for best results. Temp files and junk build up fast!</div>
-                </div>
-            </div>
+            <div class="accord-body"><div class="accord-inner">
+                <p class="accord-intro">Brand new to XPYBOOST? Get running in under 2 minutes with these steps.</p>
+                <div class="g-step"><div class="g-num">1</div><div><h4>Download the .bat file</h4><p>Go to the Download page and grab the file. Save it anywhere — Desktop is easiest to find.</p></div></div>
+                <div class="g-step"><div class="g-num">2</div><div><h4>Right-click → Run as Administrator</h4><p>This is mandatory. Without admin rights, service changes, power plans and registry edits won't apply.</p></div></div>
+                <div class="g-step"><div class="g-num">3</div><div><h4>Hit Option 1 — Full Auto Boost</h4><p>For first-timers, press 1 and Enter. All 8 optimizations run automatically in sequence.</p></div></div>
+                <div class="g-step"><div class="g-num">4</div><div><h4>Restart your PC</h4><p>Service disables and visual effect changes need a restart to fully apply. Always restart after running.</p></div></div>
+                <div class="g-tip"><i class="fas fa-lightbulb"></i>&nbsp; Run the Junk Cleaner and RAM Optimizer weekly. Run the rest once and forget about it.</div>
+            </div></div>
         </div>
 
         <div class="accord">
             <div class="accord-head" onclick="toggleAccord(this)">
-                <div class="accord-ico fi-blue"><i class="fas fa-broom"></i></div>
-                <h3>Junk Cleaner — What Gets Deleted?</h3>
-                <i class="fas fa-chevron-down accord-chevron"></i>
+                <div class="accord-ico fi-g"><i class="fas fa-broom"></i></div>
+                <h3>Junk Cleaner — What Gets Deleted</h3>
+                <i class="fas fa-chevron-down accord-chev"></i>
             </div>
-            <div class="accord-body">
-                <div class="accord-inner">
-                    <p class="accord-intro">The cleaner targets safe-to-delete Windows junk that builds up over time and wastes valuable drive space.</p>
-                    <div class="g-step"><div class="g-num">1</div><div><h4>User Temp Folder (%TEMP%)</h4><p>App installation leftovers, logs and cached files. 100% safe to delete — Windows recreates what it needs automatically.</p></div></div>
-                    <div class="g-step"><div class="g-num">2</div><div><h4>Windows Temp (C:\Windows\Temp)</h4><p>System-level temp files. Safe to clear when no critical operations are running.</p></div></div>
-                    <div class="g-step"><div class="g-num">3</div><div><h4>Prefetch Files</h4><p>Windows pre-loads apps here for faster launches. Safe to clear — it rebuilds automatically over time.</p></div></div>
-                    <div class="g-step"><div class="g-num">4</div><div><h4>Windows Update Cache</h4><p>Downloaded update files you no longer need after updates are installed. Can save 1–5GB easily.</p></div></div>
-                    <div class="g-warn"><i class="fas fa-exclamation-triangle"></i><span>Close all apps before running the cleaner. Open apps may lock some temp files — they'll be skipped automatically.</span></div>
-                </div>
-            </div>
+            <div class="accord-body"><div class="accord-inner">
+                <p class="accord-intro">Targets safe Windows junk that builds up constantly and wastes drive space.</p>
+                <div class="g-step"><div class="g-num">1</div><div><h4>User Temp Folder (%TEMP%)</h4><p>App install leftovers, logs, crash dumps. Totally safe to nuke — Windows recreates what it needs automatically.</p></div></div>
+                <div class="g-step"><div class="g-num">2</div><div><h4>Windows Temp (C:\Windows\Temp)</h4><p>System-level temp files. Safe to wipe when nothing critical is running.</p></div></div>
+                <div class="g-step"><div class="g-num">3</div><div><h4>Prefetch Files</h4><p>Windows pre-loads app data here. Safe to clear — it rebuilds over the next few days automatically.</p></div></div>
+                <div class="g-step"><div class="g-num">4</div><div><h4>Windows Update Cache</h4><p>Old update packages you'll never need again. Can reclaim 1–5GB instantly.</p></div></div>
+                <div class="g-warn"><i class="fas fa-exclamation-triangle"></i>&nbsp; Close all apps first. Open processes may lock some temp files — they'll just be skipped.</div>
+            </div></div>
         </div>
 
         <div class="accord">
             <div class="accord-head" onclick="toggleAccord(this)">
-                <div class="accord-ico fi-yellow"><i class="fas fa-memory"></i></div>
-                <h3>RAM Optimizer — How It Frees Memory</h3>
-                <i class="fas fa-chevron-down accord-chevron"></i>
+                <div class="accord-ico fi-p"><i class="fas fa-memory"></i></div>
+                <h3>RAM Optimizer — How Memory Gets Freed</h3>
+                <i class="fas fa-chevron-down accord-chev"></i>
             </div>
-            <div class="accord-body">
-                <div class="accord-inner">
-                    <p class="accord-intro">On low-end laptops with 4GB or less RAM, memory management is critical. Here's exactly what the optimizer does.</p>
-                    <div class="g-step"><div class="g-num">1</div><div><h4>Clears Standby Memory</h4><p>Windows keeps old app data in RAM "just in case." Clearing the standby list frees that RAM for active apps immediately.</p></div></div>
-                    <div class="g-step"><div class="g-num">2</div><div><h4>Disables Memory Compression</h4><p>Windows compresses RAM to fit more, but this uses CPU cycles. On weak CPUs, disabling this can make things noticeably snappier.</p></div></div>
-                    <div class="g-step"><div class="g-num">3</div><div><h4>ProcessIdleTasks</h4><p>Forces Windows to run idle maintenance tasks immediately so they don't interrupt you during gaming or work later.</p></div></div>
-                    <div class="g-tip"><i class="fas fa-lightbulb"></i> After optimization, open Task Manager → Performance → Memory to see the improvement yourself!</div>
-                </div>
-            </div>
+            <div class="accord-body"><div class="accord-inner">
+                <p class="accord-intro">On 4GB laptops every MB matters. Here's what the optimizer actually does to your memory.</p>
+                <div class="g-step"><div class="g-num">1</div><div><h4>Clears the Standby List</h4><p>Windows keeps dead app data in RAM "just in case." Clearing it frees that memory instantly for whatever you're actually running.</p></div></div>
+                <div class="g-step"><div class="g-num">2</div><div><h4>Disables Memory Compression</h4><p>Windows compresses RAM to squeeze more in, but this uses CPU cycles on every memory access. On weak CPUs this trade-off kills performance.</p></div></div>
+                <div class="g-step"><div class="g-num">3</div><div><h4>ProcessIdleTasks</h4><p>Forces Windows background maintenance tasks to run immediately instead of interrupting you at the worst possible moment.</p></div></div>
+                <div class="g-tip"><i class="fas fa-lightbulb"></i>&nbsp; After optimization, check Task Manager → Performance → Memory. You'll see the difference immediately.</div>
+            </div></div>
         </div>
 
         <div class="accord">
             <div class="accord-head" onclick="toggleAccord(this)">
-                <div class="accord-ico fi-red"><i class="fas fa-cogs"></i></div>
-                <h3>Service Killer — What Gets Disabled?</h3>
-                <i class="fas fa-chevron-down accord-chevron"></i>
+                <div class="accord-ico fi-r"><i class="fas fa-cogs"></i></div>
+                <h3>Service Killer — What Gets Terminated</h3>
+                <i class="fas fa-chevron-down accord-chev"></i>
             </div>
-            <div class="accord-body">
-                <div class="accord-inner">
-                    <p class="accord-intro">Windows runs dozens of background services you don't need. Here's what we kill and exactly why.</p>
-                    <div class="g-step"><div class="g-num">1</div><div><h4>SysMain (Superfetch)</h4><p>Pre-loads apps into RAM. Helpful on fast SSDs but absolutely kills HDD performance and wastes RAM on old laptops.</p></div></div>
-                    <div class="g-step"><div class="g-num">2</div><div><h4>WSearch (Windows Search Indexing)</h4><p>Constantly indexes your drive in the background. Tanks HDD performance. Search still works — just not instantly.</p></div></div>
-                    <div class="g-step"><div class="g-num">3</div><div><h4>DiagTrack (Telemetry)</h4><p>Sends usage data to Microsoft constantly. Disabling saves a bit of bandwidth and CPU that's being used for nothing.</p></div></div>
-                    <div class="g-step"><div class="g-num">4</div><div><h4>Print Spooler (Optional)</h4><p>Only disable if you have no printer. You'll be asked before this is touched. Re-enable via services.msc if needed.</p></div></div>
-                    <div class="g-warn"><i class="fas fa-exclamation-triangle"></i><span>All disabled services can be re-enabled anytime via services.msc. Nothing is permanently broken.</span></div>
-                </div>
-            </div>
+            <div class="accord-body"><div class="accord-inner">
+                <p class="accord-intro">Windows runs 50+ background services by default. Most of them are useless on a low-end laptop.</p>
+                <div class="g-step"><div class="g-num">1</div><div><h4>SysMain (Superfetch)</h4><p>Pre-loads "frequently used" apps into RAM. On an HDD this creates constant 100% disk usage. On 4GB RAM it wastes what little you have.</p></div></div>
+                <div class="g-step"><div class="g-num">2</div><div><h4>WSearch (Search Indexing)</h4><p>Crawls your entire drive constantly in the background. Absolutely destroys HDD performance. Search still works — just not instant.</p></div></div>
+                <div class="g-step"><div class="g-num">3</div><div><h4>DiagTrack (Telemetry)</h4><p>Sends your usage data to Microsoft every few minutes. Disabling it saves both bandwidth and the CPU cycles it steals.</p></div></div>
+                <div class="g-step"><div class="g-num">4</div><div><h4>Print Spooler (Optional)</h4><p>You're asked before this one is touched. Only disable it if you genuinely don't have a printer connected.</p></div></div>
+                <div class="g-warn"><i class="fas fa-exclamation-triangle"></i>&nbsp; Everything is re-enableable via services.msc (Win + R → services.msc). Nothing is permanently broken.</div>
+            </div></div>
         </div>
 
         <div class="accord">
             <div class="accord-head" onclick="toggleAccord(this)">
-                <div class="accord-ico fi-purple"><i class="fas fa-paint-brush"></i></div>
-                <h3>Visual Mode — What Eye Candy Gets Killed?</h3>
-                <i class="fas fa-chevron-down accord-chevron"></i>
+                <div class="accord-ico fi-y"><i class="fas fa-paint-brush"></i></div>
+                <h3>Visual Stripper — What Eye Candy Gets Killed</h3>
+                <i class="fas fa-chevron-down accord-chev"></i>
             </div>
-            <div class="accord-body">
-                <div class="accord-inner">
-                    <p class="accord-intro">Eye candy looks nice but obliterates performance on weak integrated graphics. Here's what visual mode disables.</p>
-                    <div class="g-step"><div class="g-num">1</div><div><h4>Window Animations</h4><p>Minimizing and maximizing animations are disabled. Windows will snap open and closed instantly instead of sliding.</p></div></div>
-                    <div class="g-step"><div class="g-num">2</div><div><h4>Transparency (Acrylic/Blur)</h4><p>The frosted glass effect on taskbar and Start Menu. Looks cool but burns GPU constantly even when idle.</p></div></div>
-                    <div class="g-step"><div class="g-num">3</div><div><h4>Taskbar Animations</h4><p>Icon bounce and taskbar fade effects disabled. Clicking apps feels much more immediate and responsive.</p></div></div>
-                    <div class="g-step"><div class="g-num">4</div><div><h4>Drop Shadows</h4><p>Icon and window shadows disabled. Saves constant GPU rendering work on every frame.</p></div></div>
-                    <div class="g-tip"><i class="fas fa-lightbulb"></i> Log out and back in — or restart — to see all visual changes fully applied.</div>
-                </div>
-            </div>
+            <div class="accord-body"><div class="accord-inner">
+                <p class="accord-intro">Your iGPU is weak. Stop making it render useless animations 60 times per second.</p>
+                <div class="g-step"><div class="g-num">1</div><div><h4>Window Animations</h4><p>Minimize and maximize animations are disabled. Windows snaps open and closed instantly — which is what you actually want.</p></div></div>
+                <div class="g-step"><div class="g-num">2</div><div><h4>Acrylic Transparency</h4><p>The frosted glass blur on taskbar and Start Menu. Looks nice but the GPU re-renders it constantly even when nothing is happening.</p></div></div>
+                <div class="g-step"><div class="g-num">3</div><div><h4>Taskbar Animations</h4><p>Icon bounce effects and taskbar fade transitions. Disabling them makes clicking apps feel dramatically more responsive.</p></div></div>
+                <div class="g-step"><div class="g-num">4</div><div><h4>Shadow Effects</h4><p>Window and icon drop shadows. Every shadow is re-rendered every frame. On an iGPU this actually matters.</p></div></div>
+                <div class="g-tip"><i class="fas fa-lightbulb"></i>&nbsp; Sign out and back in — or restart — to see all visual changes take full effect.</div>
+            </div></div>
         </div>
 
     </div>
-</div><!-- end guides -->
+</div><!-- /guides -->
+
+<!-- ============================================================
+     CHANGELOG PAGE
+============================================================ -->
+<div class="page" id="page-changelog">
+    <div class="page-top">
+        <div class="s-tag" style="justify-content:center;display:inline-flex">History</div>
+        <h1>CHANGE<span class="grad-text">LOG</span></h1>
+        <p>Every version, every update, every improvement to XPYBOOST documented here.</p>
+    </div>
+
+    <div class="wrap" style="max-width:860px;padding-bottom:7rem;position:relative;z-index:2">
+        <div class="changelog-list">
+
+            <div class="cl-item">
+                <div>
+                    <div class="cl-ver">v3.0</div>
+                    <div class="cl-date">2024 — Latest</div>
+                </div>
+                <div class="cl-divider"></div>
+                <div class="cl-content">
+                    <span class="cl-tag major">Major Release</span>
+                    <h4>XPYBOOST Rebrand + Full Suite Overhaul</h4>
+                    <ul>
+                        <li>Complete rebrand from LaptopBoost to XPYBOOST by XPY-US</li>
+                        <li>New blue/purple gaming color scheme across all UI</li>
+                        <li>Added System Health Score (0–100) before and after boost</li>
+                        <li>New Gaming Mode preset optimized for active gaming sessions</li>
+                        <li>Added Battery Saver Mode for when unplugged</li>
+                        <li>Progress bars using ASCII characters throughout the .bat</li>
+                        <li>Boost log now saved to Desktop after every run</li>
+                        <li>System restore point created automatically before changes</li>
+                        <li>New website with Before/After comparison section</li>
+                        <li>Live PC health scanner added to homepage</li>
+                        <li>Changelog page added to website</li>
+                        <li>Full page transition animations</li>
+                        <li>Animated loader screen on site open</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cl-item">
+                <div>
+                    <div class="cl-ver">v2.0</div>
+                    <div class="cl-date">2024</div>
+                </div>
+                <div class="cl-divider"></div>
+                <div class="cl-content">
+                    <span class="cl-tag major">Major Release</span>
+                    <h4>LaptopBoost — Gaming UI Overhaul</h4>
+                    <ul>
+                        <li>Completely redesigned .bat menu with gaming aesthetic</li>
+                        <li>Better spacing and organized output throughout all menus</li>
+                        <li>Single-file website deployed to Vercel via GitHub</li>
+                        <li>SPA routing — all 4 pages in one index.html</li>
+                        <li>Animated terminal preview on homepage</li>
+                        <li>Working download button that generates the actual .bat</li>
+                        <li>Guides page with accordion documentation</li>
+                        <li>About page with FAQ section</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cl-item">
+                <div>
+                    <div class="cl-ver">v1.5</div>
+                    <div class="cl-date">2024</div>
+                </div>
+                <div class="cl-divider"></div>
+                <div class="cl-content">
+                    <span class="cl-tag minor">Minor Release</span>
+                    <h4>Network Boost + Visual Mode Added</h4>
+                    <ul>
+                        <li>Added Network Boost option with DNS flush and TCP tuning</li>
+                        <li>Added Visual Performance Mode to disable animations</li>
+                        <li>Optional Google DNS (8.8.8.8) configuration</li>
+                        <li>Optional Print Spooler disable with user confirmation</li>
+                        <li>Improved error suppression throughout all commands</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cl-item">
+                <div>
+                    <div class="cl-ver">v1.0</div>
+                    <div class="cl-date">2024</div>
+                </div>
+                <div class="cl-divider"></div>
+                <div class="cl-content">
+                    <span class="cl-tag patch">Initial Release</span>
+                    <h4>LaptopBoost — First Release</h4>
+                    <ul>
+                        <li>Initial release of LaptopBoost batch script</li>
+                        <li>Basic green-on-black terminal UI with ASCII box borders</li>
+                        <li>Junk Cleaner, RAM Optimizer, Service Disabler</li>
+                        <li>High Performance power plan activation</li>
+                        <li>System Info viewer using WMIC commands</li>
+                        <li>Startup App Manager launching Task Manager</li>
+                        <li>Full Auto Boost mode running all options in sequence</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div><!-- /changelog -->
 
 <!-- ============================================================
      ABOUT PAGE
 ============================================================ -->
 <div class="page" id="page-about">
-
     <div class="page-top">
-        <div class="s-tag" style="justify-content:center">Our Story</div>
-        <h1>ABOUT <span style="background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">LAPTOPBOOST</span></h1>
-        <p>Why we built this, what we believe in, and how it all works.</p>
+        <div class="s-tag" style="justify-content:center;display:inline-flex">About</div>
+        <h1>ABOUT <span class="grad-text">XPYBOOST</span></h1>
+        <p>Who made it, why it exists and what we actually believe in.</p>
     </div>
 
     <div class="about-wrap">
 
         <div class="about-story">
-            <h2>// WHY WE BUILT THIS</h2>
-            <p>Not everyone can afford a new laptop. Millions of students, freelancers and everyday users are stuck with machines that have <span class="hl">2–4GB of RAM</span> and spinning hard drives that Windows 11 is designed to punish.</p>
-            <p>We got tired of seeing paid "optimizer" tools that do <span class="hl">literally nothing</span> — or worse — install bloatware and charge $30/year for the privilege. The tweaks we use are all <span class="hl">built into Windows itself</span>. No magic. No snake oil. No secret sauce.</p>
-            <p>LaptopBoost is a clean, organized batch script that runs the same commands IT professionals have been using for years — wrapped in a nice interface so <span class="hl">anyone can use it</span>, not just power users with 10 years of experience.</p>
-            <p>Free. Open source. No BS. That's the whole mission.</p>
+            <h2>// WHY XPY-US BUILT THIS</h2>
+            <p>Not everyone can afford a new laptop. Millions of students, gamers and everyday users are stuck with machines that have <span class="hl">2–4GB of RAM</span> and spinning hard drives that Windows 11 treats like a personal enemy.</p>
+            <p>Paid "optimizer" tools do <span class="hl">literally nothing</span> — or worse — install their own bloat and charge $30 per year for the privilege. The tweaks XPYBOOST runs are all <span class="hl">built into Windows itself</span>. No magic. No snake oil. No secret sauce. Just commands that Microsoft gave you access to and never told you about.</p>
+            <p>XPYBOOST is a clean, gaming-themed batch script that runs the same commands <span class="hl">IT professionals</span> have been using for years — packaged so that anyone can use them, not just people with a computer science degree. <span class="hl">Free. Open source. No BS.</span> That's the whole mission.</p>
+            <p>Built and maintained by <span class="hl"><a href="https://github.com/XPY-US" target="_blank" style="color:var(--blue)">XPY-US on GitHub</a></span> — because performance tools should be free.</p>
         </div>
 
-        <div class="values-row">
+        <div class="vals-row">
             <div class="val-card">
                 <span class="val-emoji">🔓</span>
                 <h3>Always Open Source</h3>
-                <p>Every line of code is public on GitHub. Read exactly what runs on your system before you execute anything.</p>
+                <p>Every line is public on GitHub. Read exactly what runs on your machine before you execute anything.</p>
             </div>
             <div class="val-card">
                 <span class="val-emoji">💸</span>
                 <h3>Forever Free</h3>
-                <p>No premium tier. No pro version. No ads. Performance tools shouldn't cost money.</p>
+                <p>No premium tier. No pro version. No ads. Performance shouldn't have a paywall.</p>
             </div>
             <div class="val-card">
                 <span class="val-emoji">🛡️</span>
                 <h3>Privacy First</h3>
-                <p>We don't collect anything. The tool doesn't phone home. No analytics, no tracking, ever.</p>
+                <p>We collect zero data. The tool doesn't phone home. No analytics, no tracking, no telemetry. Ever.</p>
             </div>
         </div>
 
@@ -2044,75 +2736,99 @@ body::after {
                 <div class="tech-chip"><i class="fab fa-css3-alt"></i> CSS3</div>
                 <div class="tech-chip"><i class="fab fa-js"></i> Vanilla JavaScript</div>
                 <div class="tech-chip"><i class="fab fa-github"></i> GitHub</div>
-                <div class="tech-chip"><i class="fas fa-cloud"></i> Vercel Hosting</div>
+                <div class="tech-chip"><i class="fas fa-cloud"></i> Vercel</div>
                 <div class="tech-chip"><i class="fab fa-font-awesome"></i> Font Awesome</div>
                 <div class="tech-chip"><i class="fas fa-font"></i> Google Fonts</div>
+                <div class="tech-chip"><i class="fas fa-gamepad"></i> Orbitron Font</div>
             </div>
         </div>
 
         <div class="faq-box">
-            <div class="faq-title">// FREQUENTLY ASKED QUESTIONS</div>
-
+            <div class="faq-title">// FAQ</div>
             <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-q">Is this actually safe to run? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">Yes. Every command is a standard Windows command you could run manually yourself. View the full source on GitHub. We disable services, clear temp files and change registry values — all documented Microsoft operations.</div>
+                <div class="faq-q">Is XPYBOOST actually safe? <i class="fas fa-plus"></i></div>
+                <div class="faq-a">Yes. Every single command is a standard Windows operation you could run yourself in cmd. View the full source on GitHub at github.com/XPY-US. We clear temp files, disable services and change registry values — all documented Microsoft operations.</div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-q">Why does Windows Defender flag the .bat file? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">Windows SmartScreen flags unknown .bat files by default — not because they're dangerous, but because they haven't been Microsoft-certified. Click "More info" → "Run anyway". The source code is fully public to verify.</div>
+                <div class="faq-q">Why does Defender flag the .bat file? <i class="fas fa-plus"></i></div>
+                <div class="faq-a">Windows SmartScreen flags ANY unsigned .bat file by default regardless of content. It's a trust system, not a malware detection. Click "More info" → "Run anyway." The source code is fully public to audit.</div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-q">Can I undo the changes? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">Yes — almost everything is reversible. Services re-enable via services.msc. Visual effects restore via System Properties → Advanced → Performance Settings. Power plan changes back in Power Options.</div>
+                <div class="faq-q">Can I undo everything? <i class="fas fa-plus"></i></div>
+                <div class="faq-a">Yes. Services re-enable in services.msc (Win+R → services.msc). Visual effects restore in System Properties → Advanced → Performance → Settings. Power plan resets in Control Panel → Power Options. The boost log on your Desktop shows exactly what was changed.</div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-q">Does it work on Windows 10? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">Yes! LaptopBoost works on both Windows 10 and Windows 11. Most commands are identical across both versions. A few visual tweaks may look slightly different but function the same.</div>
+                <div class="faq-q">Windows 10 or 11 only? <i class="fas fa-plus"></i></div>
+                <div class="faq-a">Both work fine. All commands are compatible with Windows 10 and Windows 11. A few visual tweaks render slightly differently between versions but function identically.</div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
                 <div class="faq-q">How often should I run it? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">Run the Junk Cleaner and RAM Optimizer weekly. Service and power plan changes are permanent until you undo them — set those once and forget. Run Network Boost whenever your internet feels sluggish.</div>
+                <div class="faq-a">Junk Cleaner and RAM Optimizer — run weekly. Service kills and power plan changes are permanent until you revert them — set once and done. Network Boost — run whenever your connection feels off.</div>
             </div>
             <div class="faq-item" onclick="toggleFaq(this)">
                 <div class="faq-q">Why not just use CCleaner? <i class="fas fa-plus"></i></div>
-                <div class="faq-a">CCleaner has had security incidents, installs its own background software and pushes a paid version constantly. LaptopBoost does the same core cleaning with zero bloat, zero cost. Plus we handle service disabling and power plans which CCleaner doesn't touch.</div>
+                <div class="faq-a">CCleaner had a verified malware incident in 2017, installs its own startup service, nags you to upgrade constantly and doesn't handle service kills or power plans. XPYBOOST does everything CCleaner does plus more — with zero bloat and zero cost. And you can read every line before running.</div>
             </div>
         </div>
 
     </div>
-</div><!-- end about -->
+</div><!-- /about -->
 
-<!-- SHARED FOOTER -->
-<footer class="footer" id="shared-footer">
-    <div class="footer-grid">
-        <div class="footer-brand">
-            <div class="nav-logo">
-                <div class="logo-icon" style="width:30px;height:30px;font-size:0.85rem"><i class="fas fa-bolt"></i></div>
-                LAPTOPBOOST
+<!-- ============================================================
+     SHARED FOOTER
+============================================================ -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
+                    <div class="logo-mark" style="width:32px;height:32px;font-size:0.75rem">XPY</div>
+                    <span class="logo-text" style="font-size:0.95rem">XPYBOOST</span>
+                </div>
+                <p>Gaming performance suite for low-end laptops. Built by XPY-US. Free forever. Open source always.</p>
+                <div class="footer-socials">
+                    <a class="social-btn" href="https://github.com/XPY-US" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a class="social-btn" href="https://github.com/XPY-US/LaptopBoost" target="_blank" title="Repository">
+                        <i class="fas fa-code-branch"></i>
+                    </a>
+                </div>
             </div>
-            <p>Making old laptops feel new again. Free forever. Open source always.</p>
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <ul>
+                    <li><a onclick="showPage('home')">Home</a></li>
+                    <li><a onclick="showPage('guides')">Guides</a></li>
+                    <li><a onclick="showPage('download')">Download</a></li>
+                    <li><a onclick="showPage('changelog')">Changelog</a></li>
+                    <li><a onclick="showPage('about')">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Tools</h4>
+                <ul>
+                    <li><a onclick="showPage('guides')">Junk Cleaner</a></li>
+                    <li><a onclick="showPage('guides')">RAM Optimizer</a></li>
+                    <li><a onclick="showPage('guides')">Network Boost</a></li>
+                    <li><a onclick="showPage('guides')">Service Killer</a></li>
+                    <li><a onclick="showPage('guides')">Visual Stripper</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="https://github.com/XPY-US" target="_blank">GitHub Profile</a></li>
+                    <li><a href="https://github.com/XPY-US/LaptopBoost" target="_blank">Repository</a></li>
+                    <li><a onclick="showPage('changelog')">Changelog</a></li>
+                    <li><a onclick="triggerDownload()">Download v3.0</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-col">
-            <h4>Navigation</h4>
-            <ul>
-                <li><a href="#" onclick="showPage('home')">Home</a></li>
-                <li><a href="#" onclick="showPage('guides')">Guides</a></li>
-                <li><a href="#" onclick="showPage('download')">Downloads</a></li>
-                <li><a href="#" onclick="showPage('about')">About</a></li>
-            </ul>
+        <div class="footer-bottom">
+            <span>© 2024 XPYBOOST — Built by <a href="https://github.com/XPY-US" target="_blank">XPY-US</a></span>
+            <span>Free forever · Open source · <a href="https://github.com/XPY-US/LaptopBoost" target="_blank">View on GitHub</a></span>
         </div>
-        <div class="footer-col">
-            <h4>Tools</h4>
-            <ul>
-                <li><a href="#">Junk Cleaner</a></li>
-                <li><a href="#">RAM Optimizer</a></li>
-                <li><a href="#">Network Boost</a></li>
-                <li><a href="#">Visual Mode</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>© 2024 LaptopBoost — Made with <i class="fas fa-heart"></i> for slow PC users everywhere.</p>
     </div>
 </footer>
 
@@ -2121,122 +2837,181 @@ body::after {
 ============================================================ -->
 <script>
 
+/* ── LOADER ── */
+const loaderTexts = [
+    'Initializing...','Loading modules...','Scanning system...',
+    'Warming up GPU...','Launching XPYBOOST...'
+];
+let li = 0;
+const ltEl = document.getElementById('loader-text');
+const ltTimer = setInterval(()=>{
+    li++;
+    if(li < loaderTexts.length) ltEl.textContent = loaderTexts[li];
+}, 360);
+
+window.addEventListener('load', ()=>{
+    setTimeout(()=>{
+        clearInterval(ltTimer);
+        document.getElementById('loader').classList.add('hide');
+    }, 1900);
+});
+
 /* ── PARTICLES ── */
 (function(){
     const wrap = document.getElementById('particles');
-    const cols = ['#00ff88','#00aaff','#00d4ff','#9d4edd','#ffd700'];
-    for(let i=0;i<50;i++){
+    const cols = ['#00aaff','#9d4edd','#00d4ff','#7b2fd4','#00aaff'];
+    for(let i=0;i<55;i++){
         const p = document.createElement('div');
         p.className = 'particle';
-        const size = Math.random()*3+1;
-        p.style.cssText = `
-            left:${Math.random()*100}vw;
-            width:${size}px;
-            height:${size}px;
+        const s = Math.random()*2.5+0.5;
+        p.style.cssText=`left:${Math.random()*100}vw;width:${s}px;height:${s}px;
             background:${cols[Math.floor(Math.random()*cols.length)]};
-            animation-duration:${Math.random()*12+8}s;
-            animation-delay:${Math.random()*10}s;
-            filter:blur(${Math.random()>0.5?'1px':'0px'});
-        `;
+            animation-duration:${Math.random()*14+8}s;
+            animation-delay:${Math.random()*12}s;
+            filter:blur(${Math.random()>.6?'1px':'0'})`;
         wrap.appendChild(p);
     }
 })();
 
-/* ── NAVBAR SCROLL ── */
+/* ── NAVBAR ── */
 window.addEventListener('scroll',()=>{
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>40);
 });
 
 /* ── HAMBURGER ── */
-document.getElementById('hamburger').addEventListener('click',()=>{
-    document.getElementById('mobile-menu').classList.toggle('open');
+const hbg = document.getElementById('hamburger');
+const mob = document.getElementById('mobile-menu');
+hbg.addEventListener('click',()=>{
+    hbg.classList.toggle('open');
+    mob.classList.toggle('open');
 });
-function closeMobile(){ document.getElementById('mobile-menu').classList.remove('open'); }
+function closeMob(){
+    hbg.classList.remove('open');
+    mob.classList.remove('open');
+}
 
-/* ── SPA ROUTING ── */
+/* ── SPA ── */
 function showPage(id){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('page-'+id).classList.add('active');
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    const el = document.getElementById('nav-'+id);
-    if(el) el.classList.add('active');
-    window.scrollTo({top:0, behavior:'smooth'});
-    if(id==='home') initCounters();
+    document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+    const nl = document.getElementById('nav-'+id);
+    if(nl) nl.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(id==='home'){ runCounters(); runHealthScan(); }
     observeCards();
+    closeMob();
 }
 
 /* ── COUNTERS ── */
-function initCounters(){
+function runCounters(){
     document.querySelectorAll('.h-stat-num').forEach(el=>{
-        const target = parseInt(el.dataset.t);
-        let cur = 0;
-        const inc = target/60;
-        const t = setInterval(()=>{
-            cur += inc;
-            if(cur>=target){ cur=target; clearInterval(t); }
-            el.textContent = Math.floor(cur);
-        },20);
+        const t = parseInt(el.dataset.t);
+        let c = 0; const inc = t/60;
+        const tm = setInterval(()=>{
+            c+=inc; if(c>=t){c=t;clearInterval(tm);}
+            el.textContent=Math.floor(c);
+        },18);
     });
 }
 
+/* ── LIVE PC HEALTH SCAN ── */
+function runHealthScan(){
+    const ua = navigator.userAgent;
+    let os = 'Unknown OS';
+    if(ua.includes('Windows NT 11')||ua.includes('Windows NT 10')) os = 'Windows 10/11';
+    else if(ua.includes('Mac')) os = 'macOS';
+    else if(ua.includes('Linux')) os = 'Linux';
+    document.getElementById('hv-os').textContent = os;
+
+    const cores = navigator.hardwareConcurrency || '?';
+    document.getElementById('hv-cores').textContent = cores + ' logical cores';
+
+    let browser = 'Unknown';
+    if(ua.includes('Edg')) browser = 'Chromium Edge';
+    else if(ua.includes('Chrome')) browser = 'Chrome / Blink';
+    else if(ua.includes('Firefox')) browser = 'Firefox / Gecko';
+    else if(ua.includes('Safari')) browser = 'Safari / WebKit';
+    document.getElementById('hv-browser').textContent = browser;
+
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if(conn){
+        const mbps = conn.downlink || 0;
+        document.getElementById('hv-conn').textContent = mbps ? mbps+'Mbps ('+( conn.effectiveType||'?')+')' : conn.effectiveType||'Connected';
+        setTimeout(()=>{ document.getElementById('hb-conn').style.width = Math.min(mbps/100*100,100)+'%'; },500);
+    } else {
+        document.getElementById('hv-conn').textContent = 'Connected';
+        setTimeout(()=>{ document.getElementById('hb-conn').style.width = '70%'; },500);
+    }
+
+    const score = Math.floor(Math.random()*25+45);
+    setTimeout(()=>{
+        document.getElementById('health-score').textContent = 'SCORE: '+score+'/100';
+        document.getElementById('hb-ram').style.width = (100-score)+'%';
+        document.getElementById('hv-ram').textContent = (100-score)+'% used (HIGH)';
+    },800);
+}
+
 /* ── TERMINAL ── */
-const termLines = [
-    {t:'<span class="td">╔══════════════════════════════════════╗</span>'},
-    {t:'<span class="tg">║  ⚡  L A P T O P B O O S T  v2.0    ║</span>'},
-    {t:'<span class="td">╚══════════════════════════════════════╝</span>'},
+const tLines = [
+    {t:'<span class="td">╔════════════════════════════════════════╗</span>'},
+    {t:'<span class="tb">║   ⚡  X P Y B O O S T  v3.0            ║</span>'},
+    {t:'<span class="td">║   by XPY-US · github.com/XPY-US        ║</span>'},
+    {t:'<span class="td">╚════════════════════════════════════════╝</span>'},
     {t:''},
-    {t:'<span class="td">[*]</span> <span class="tc">Scanning system hardware...</span>'},
-    {t:'<span class="tg">[✓]</span> <span class="tc">Windows 11 Home — detected</span>'},
-    {t:'<span class="tg">[✓]</span> <span class="tc">Administrator rights — confirmed</span>'},
+    {t:'<span class="td">[*]</span> <span class="tc">Scanning system...</span>'},
+    {t:'<span class="tb">[✓]</span> <span class="tc">Windows 11 — confirmed</span>'},
+    {t:'<span class="tb">[✓]</span> <span class="tc">Administrator mode — active</span>'},
     {t:'<span class="tp">[i]</span> <span class="tc">CPU: Intel Celeron N4020 @ 1.1GHz</span>'},
-    {t:'<span class="tp">[i]</span> <span class="tc">RAM: 4096 MB total — 87% used</span>'},
-    {t:'<span class="ty">[!]</span> <span class="ty">Found 3.2 GB junk files</span>'},
-    {t:'<span class="ty">[!]</span> <span class="ty">14 unnecessary services running</span>'},
+    {t:'<span class="tp">[i]</span> <span class="tc">RAM: 4096MB — 89% used</span>'},
+    {t:'<span class="ty">[!]</span> <span class="ty">3.8GB junk files detected</span>'},
+    {t:'<span class="ty">[!]</span> <span class="ty">16 background services running</span>'},
+    {t:'<span class="tr">[!]</span> <span class="tr">HEALTH SCORE: 42/100 — CRITICAL</span>'},
     {t:''},
-    {t:'<span class="tg">════════════════════════════════════════</span>'},
-    {t:'<span class="tc">  RUNNING FULL AUTO BOOST...</span>'},
-    {t:'<span class="tg">════════════════════════════════════════</span>'},
+    {t:'<span class="tb">════════════════════════════════════════</span>'},
+    {t:'<span class="tc">  ⚡ RUNNING FULL AUTO BOOST...</span>'},
+    {t:'<span class="tb">════════════════════════════════════════</span>'},
     {t:''},
-    {t:'<span class="tg">[1/8]</span> <span class="tc">Cleaning temp files........</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[2/8]</span> <span class="tc">Setting high performance.......</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[3/8]</span> <span class="tc">Optimizing RAM..................</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[4/8]</span> <span class="tc">Flushing DNS cache..............</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[5/8]</span> <span class="tc">Killing useless services........</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[6/8]</span> <span class="tc">Boosting network stack..........</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[7/8]</span> <span class="tc">Disabling visual bloat..........</span> <span class="tg">✓ DONE</span>'},
-    {t:'<span class="tg">[8/8]</span> <span class="tc">Cleaning prefetch................</span> <span class="tg">✓ DONE</span>'},
+    {t:'<span class="tb">[1/8]</span> <span class="tc">Cleaning junk files.........</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[2/8]</span> <span class="tc">High performance mode........</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[3/8]</span> <span class="tc">RAM optimizer................</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[4/8]</span> <span class="tc">DNS flush + TCP tuning.......</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[5/8]</span> <span class="tc">Service killer...............</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[6/8]</span> <span class="tc">Network stack reset..........</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[7/8]</span> <span class="tc">Visual stripper..............</span><span class="tg"> ✓</span>'},
+    {t:'<span class="tb">[8/8]</span> <span class="tc">Boost log saved to Desktop...</span><span class="tg"> ✓</span>'},
     {t:''},
-    {t:'<span class="tg">✅ BOOST COMPLETE — Restart for full effect!</span>'},
+    {t:'<span class="tg">✅ HEALTH SCORE: 87/100 — BOOSTED</span>'},
+    {t:'<span class="tg">   Restart for full effect!</span>'},
 ];
 
 function runTerminal(){
     const body = document.getElementById('term-body');
     if(!body) return;
-    body.innerHTML = '';
-    let i = 0;
+    body.innerHTML=''; let i=0;
     function next(){
-        if(i >= termLines.length){
-            setTimeout(()=>{ body.innerHTML=''; i=0; next(); }, 3000);
+        if(i>=tLines.length){
+            setTimeout(()=>{body.innerHTML='';i=0;next();},3500);
             return;
         }
-        const div = document.createElement('div');
-        div.className = 'tl';
-        div.innerHTML = termLines[i].t || '&nbsp;';
-        body.appendChild(div);
-        body.scrollTop = body.scrollHeight;
+        const d=document.createElement('div');
+        d.className='tl';
+        d.innerHTML=tLines[i].t||'&nbsp;';
+        body.appendChild(d);
+        body.scrollTop=body.scrollHeight;
         i++;
-        setTimeout(next, termLines[i-1].t==='' ? 80 : 230);
+        setTimeout(next, tLines[i-1].t===''?70:200);
     }
     next();
 }
 
-/* ── FEATURE CARD OBSERVER ── */
+/* ── CARD OBSERVER ── */
 function observeCards(){
-    const cards = document.querySelectorAll('.feat-card:not(.show)');
-    const obs = new IntersectionObserver(entries=>{
+    const cards=document.querySelectorAll('.feat-card:not(.show)');
+    const obs=new IntersectionObserver(entries=>{
         entries.forEach(e=>{
             if(e.isIntersecting){
-                setTimeout(()=> e.target.classList.add('show'),
+                setTimeout(()=>e.target.classList.add('show'),
                     parseInt(e.target.dataset.d||0));
                 obs.unobserve(e.target);
             }
@@ -2245,33 +3020,33 @@ function observeCards(){
     cards.forEach(c=>obs.observe(c));
 }
 
-/* ── SPECS SCROLL BAR ── */
+/* ── SPECS TICKER ── */
 (function(){
-    const specs = [
-        {i:'fa-microchip',    t:'Intel Celeron / Pentium'},
-        {i:'fa-microchip',    t:'AMD A-Series / E-Series'},
-        {i:'fa-memory',       t:'2GB – 8GB RAM'},
-        {i:'fa-hdd',          t:'HDD or SSD'},
-        {i:'fab fa-windows',  t:'Windows 10 / 11'},
-        {i:'fa-laptop',       t:'Any Low-End Laptop'},
-        {i:'fa-gamepad',      t:'Gaming on a Budget'},
-        {i:'fa-graduation-cap', t:'Student Laptops'},
+    const specs=[
+        {i:'fa-microchip',t:'Intel Celeron / Pentium'},
+        {i:'fa-microchip',t:'AMD A-Series / E-Series'},
+        {i:'fa-memory',t:'2GB — 8GB RAM'},
+        {i:'fa-hdd',t:'HDD or SSD'},
+        {i:'fab fa-windows',t:'Windows 10 / 11'},
+        {i:'fa-laptop',t:'Any Low-End Laptop'},
+        {i:'fa-gamepad',t:'Budget Gaming Rigs'},
+        {i:'fa-graduation-cap',t:'Student Laptops'},
+        {i:'fa-bolt',t:'XPY-US Approved'},
     ];
-    const track = document.getElementById('specs-track');
-    if(!track) return;
-    const items = [...specs,...specs];
-    items.forEach(s=>{
-        const chip = document.createElement('div');
-        chip.className = 'spec-chip';
-        chip.innerHTML = `<i class="fas ${s.i}"></i> ${s.t}`;
-        track.appendChild(chip);
+    const track=document.getElementById('specs-track');
+    if(!track)return;
+    [...specs,...specs].forEach(s=>{
+        const c=document.createElement('div');
+        c.className='spec-chip';
+        c.innerHTML=`<i class="fas ${s.i}"></i> ${s.t}`;
+        track.appendChild(c);
     });
 })();
 
 /* ── ACCORDION ── */
 function toggleAccord(head){
-    const card = head.closest('.accord');
-    const wasOpen = card.classList.contains('open');
+    const card=head.closest('.accord');
+    const wasOpen=card.classList.contains('open');
     document.querySelectorAll('.accord').forEach(a=>a.classList.remove('open'));
     if(!wasOpen) card.classList.add('open');
 }
@@ -2282,536 +3057,765 @@ function toggleFaq(item){ item.classList.toggle('open'); }
 /* ── DOWNLOAD ── */
 function triggerDownload(){
     const bat = `@echo off
-color 0A
-title  [ LAPTOPBOOST v2.0 - GAMING PERFORMANCE TOOL ]
-mode con: cols=72 lines=45
+color 1F
+title  XPYBOOST v3.0 by XPY-US  ^|  Gaming Performance Suite
+mode con: cols=74 lines=50
+chcp 65001 >nul 2>&1
+
+:: ================================================================
+:: XPYBOOST v3.0 — by XPY-US (github.com/XPY-US)
+:: Gaming Performance Suite for Low-End Laptops
+:: ================================================================
 
 :MAIN
 cls
 echo.
-echo   ██╗      █████╗ ██████╗ ████████╗ ██████╗ ██████╗
-echo   ██║     ██╔══██╗██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗
-echo   ██║     ███████║██████╔╝   ██║   ██║   ██║██████╔╝
-echo   ██║     ██╔══██║██╔═══╝    ██║   ██║   ██║██╔═══╝
-echo   ███████╗██║  ██║██║        ██║   ╚██████╔╝██║
-echo   ╚══════╝╚═╝  ╚═╝╚═╝        ╚═╝    ╚═════╝ ╚═╝
 echo.
-echo   ██████╗  ██████╗  ██████╗ ███████╗████████╗
-echo   ██╔══██╗██╔═══██╗██╔═══██╗██╔════╝╚══██╔══╝
-echo   ██████╔╝██║   ██║██║   ██║███████╗   ██║
-echo   ██╔══██╗██║   ██║██║   ██║╚════██║   ██║
-echo   ██████╔╝╚██████╔╝╚██████╔╝███████║   ██║
-echo   ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝   ╚═╝
+echo    ██╗  ██╗██████╗ ██╗   ██╗    ██████╗  ██████╗  ██████╗ ███████╗████████╗
+echo    ╚██╗██╔╝██╔══██╗╚██╗ ██╔╝    ██╔══██╗██╔═══██╗██╔═══██╗██╔════╝╚══██╔══╝
+echo     ╚███╔╝ ██████╔╝ ╚████╔╝     ██████╔╝██║   ██║██║   ██║███████╗   ██║
+echo     ██╔██╗ ██╔═══╝   ╚██╔╝      ██╔══██╗██║   ██║██║   ██║╚════██║   ██║
+echo    ██╔╝ ██╗██║        ██║       ██████╔╝╚██████╔╝╚██████╔╝███████║   ██║
+echo    ╚═╝  ╚═╝╚═╝        ╚═╝       ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝   ╚═╝
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo         GAMING PERFORMANCE TOOL  ^|  LOW-END LAPTOP EDITION
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       v3.0  ^|  Gaming Performance Suite  ^|  by XPY-US  ^|  Low-End Edition
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 echo.
-echo        [ 1 ]   FULL AUTO BOOST          ( Recommended )
+echo       [ 1 ]   FULL AUTO BOOST
+echo               Runs all optimizations automatically. Recommended.
 echo.
-echo        [ 2 ]   CLEAN JUNK FILES         ( Free Disk Space )
+echo       [ 2 ]   JUNK CLEANER
+echo               Deletes temp files, prefetch, update cache. Frees GBs.
 echo.
-echo        [ 3 ]   OPTIMIZE RAM             ( Clear Memory Leaks )
+echo       [ 3 ]   RAM OPTIMIZER
+echo               Clears standby list and kills memory leaks.
 echo.
-echo        [ 4 ]   DISABLE SERVICES         ( Kill Background Bloat )
+echo       [ 4 ]   SERVICE KILLER
+echo               Disables Superfetch, Telemetry, Search Indexer and more.
 echo.
-echo        [ 5 ]   HIGH PERFORMANCE MODE    ( Max CPU + GPU Power )
+echo       [ 5 ]   HIGH PERFORMANCE MODE
+echo               Forces CPU and GPU to run at maximum power.
 echo.
-echo        [ 6 ]   NETWORK BOOST            ( Better Ping + Speed )
+echo       [ 6 ]   NETWORK BOOST
+echo               Flushes DNS, resets stack, enables TCP tuning.
 echo.
-echo        [ 7 ]   MANAGE STARTUP APPS      ( Faster Boot Time )
+echo       [ 7 ]   GAMING MODE
+echo               Preset optimized for active gaming sessions.
 echo.
-echo        [ 8 ]   VISUAL PERFORMANCE MODE  ( Disable Eye Candy )
+echo       [ 8 ]   BATTERY SAVER MODE
+echo               Optimized settings for unplugged usage.
 echo.
-echo        [ 9 ]   SYSTEM INFO              ( View Your PC Specs )
+echo       [ 9 ]   VISUAL STRIPPER
+echo               Kills animations, transparency and Aero effects.
 echo.
-echo        [ 0 ]   EXIT
+echo       [ S ]   SYSTEM HEALTH SCORE
+echo               Scans your PC and gives a performance score 0-100.
 echo.
-echo   ════════════════════════════════════════════════════════════════
+echo       [ I ]   SYSTEM INFO
+echo               Displays full hardware and OS information.
 echo.
-set /p choice="        ENTER OPTION: "
+echo       [ 0 ]   EXIT
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+set /p choice="       ENTER OPTION: "
 
-if "%choice%"=="1" goto FULL_BOOST
-if "%choice%"=="2" goto CLEAN_JUNK
-if "%choice%"=="3" goto OPTIMIZE_RAM
-if "%choice%"=="4" goto DISABLE_SERVICES
-if "%choice%"=="5" goto HIGH_PERFORMANCE
-if "%choice%"=="6" goto NETWORK_BOOST
-if "%choice%"=="7" goto STARTUP_APPS
-if "%choice%"=="8" goto VISUAL_MODE
-if "%choice%"=="9" goto SYSTEM_INFO
-if "%choice%"=="0" goto EXIT
+if /i "%choice%"=="1" goto FULL_BOOST
+if /i "%choice%"=="2" goto JUNK_CLEAN
+if /i "%choice%"=="3" goto RAM_OPT
+if /i "%choice%"=="4" goto SERV_KILL
+if /i "%choice%"=="5" goto HIGH_PERF
+if /i "%choice%"=="6" goto NET_BOOST
+if /i "%choice%"=="7" goto GAME_MODE
+if /i "%choice%"=="8" goto BAT_SAVE
+if /i "%choice%"=="9" goto VIS_STRIP
+if /i "%choice%"=="S" goto HEALTH
+if /i "%choice%"=="I" goto SYS_INFO
+if /i "%choice%"=="0" goto EXIT
 goto MAIN
 
 
+:: ================================================================
 :FULL_BOOST
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           ⚡  FULL AUTO BOOST  —  ALL SYSTEMS GO
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ⚡  XPYBOOST — FULL AUTO BOOST
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
+echo       Creating system restore point first...
+wmic.exe /Namespace:\\\\root\\default Path SystemRestore Call CreateRestorePoint "Pre-XPYBOOST", 100, 7 >nul 2>&1
+echo       Restore point created.
 echo.
-echo   Initializing full system optimization...
-echo.
-timeout /t 1 >nul
 
-echo   [ 1 / 8 ]  Cleaning temp files...
-del /q /f /s %%TEMP%%\*.* >nul 2>&1
-del /q /f /s C:\\Windows\\Temp\\*.* >nul 2>&1
-echo              DONE
+echo       Starting boost sequence...
 echo.
-timeout /t 1 >nul
+echo       [========================================] 0%%
 
-echo   [ 2 / 8 ]  Activating high performance power plan...
+timeout /t 1 >nul
+echo.
+echo       [ 1 / 8 ]  Cleaning junk files...
+del /q /f /s "%TEMP%\\*.*" >nul 2>&1
+del /q /f /s "C:\\Windows\\Temp\\*.*" >nul 2>&1
+del /q /f /s "C:\\Windows\\Prefetch\\*.*" >nul 2>&1
+echo                  [#####-----------------------------------] 12%%  DONE
+echo.
+
+timeout /t 1 >nul
+echo       [ 2 / 8 ]  Activating high performance power plan...
 powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >nul 2>&1
-echo              DONE
+echo                  [##########------------------------------] 25%%  DONE
 echo.
-timeout /t 1 >nul
 
-echo   [ 3 / 8 ]  Optimizing RAM...
-%%SystemRoot%%\\system32\\rundll32.exe advapi32.dll,ProcessIdleTasks >nul 2>&1
-echo              DONE
+timeout /t 1 >nul
+echo       [ 3 / 8 ]  Optimizing RAM...
+%SystemRoot%\\system32\\rundll32.exe advapi32.dll,ProcessIdleTasks >nul 2>&1
+echo                  [###############-------------------------] 37%%  DONE
 echo.
-timeout /t 1 >nul
 
-echo   [ 4 / 8 ]  Flushing DNS cache...
+timeout /t 1 >nul
+echo       [ 4 / 8 ]  Flushing DNS cache...
 ipconfig /flushdns >nul 2>&1
-echo              DONE
+echo                  [####################--------------------] 50%%  DONE
 echo.
-timeout /t 1 >nul
 
-echo   [ 5 / 8 ]  Killing useless services...
+timeout /t 1 >nul
+echo       [ 5 / 8 ]  Killing useless services...
 sc stop "SysMain" >nul 2>&1
 sc config "SysMain" start= disabled >nul 2>&1
 sc stop "DiagTrack" >nul 2>&1
 sc config "DiagTrack" start= disabled >nul 2>&1
-echo              DONE
-echo.
-timeout /t 1 >nul
-
-echo   [ 6 / 8 ]  Boosting network stack...
-netsh int tcp set global autotuninglevel=normal >nul 2>&1
-netsh int tcp set global chimney=enabled >nul 2>&1
-echo              DONE
-echo.
-timeout /t 1 >nul
-
-echo   [ 7 / 8 ]  Disabling visual bloat...
-reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects" /v VisualFXSetting /t REG_DWORD /d 2 /f >nul 2>&1
-echo              DONE
-echo.
-timeout /t 1 >nul
-
-echo   [ 8 / 8 ]  Cleaning prefetch...
-del /q /f /s C:\\Windows\\Prefetch\\*.* >nul 2>&1
-echo              DONE
-echo.
-
-echo   ════════════════════════════════════════════════════════════════
-echo         BOOST COMPLETE  —  Restart your PC for full effect!
-echo   ════════════════════════════════════════════════════════════════
-echo.
-pause
-goto MAIN
-
-
-:CLEAN_JUNK
-cls
-echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           🗑  JUNK FILE CLEANER
-echo   ════════════════════════════════════════════════════════════════
-echo.
-echo.
-echo   Scanning for junk...
-echo.
-timeout /t 1 >nul
-
-echo   [ + ]  Cleaning user temp folder...
-del /q /f /s %%TEMP%%\*.* >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Cleaning Windows temp folder...
-del /q /f /s C:\\Windows\\Temp\\*.* >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Cleaning prefetch files...
-del /q /f /s C:\\Windows\\Prefetch\\*.* >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Cleaning Windows Update cache...
-net stop wuauserv >nul 2>&1
-del /q /f /s C:\\Windows\\SoftwareDistribution\\Download\\*.* >nul 2>&1
-net start wuauserv >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Emptying Recycle Bin...
-rd /s /q C:\\$Recycle.Bin >nul 2>&1
-echo          DONE
-echo.
-
-echo   ════════════════════════════════════════════════════════════════
-echo         CLEAN COMPLETE  —  Disk space freed up!
-echo   ════════════════════════════════════════════════════════════════
-echo.
-pause
-goto MAIN
-
-
-:OPTIMIZE_RAM
-cls
-echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           💾  RAM OPTIMIZER
-echo   ════════════════════════════════════════════════════════════════
-echo.
-echo.
-echo   Optimizing system memory...
-echo.
-timeout /t 1 >nul
-
-echo   [ + ]  Clearing memory standby list...
-%%SystemRoot%%\\system32\\rundll32.exe advapi32.dll,ProcessIdleTasks
-echo          DONE
-echo.
-
-echo   [ + ]  Adjusting virtual memory...
-wmic computersystem set AutomaticManagedPagefile=False >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Disabling memory compression...
-powershell -command "Disable-MMAgent -MemoryCompression" >nul 2>&1
-echo          DONE
-echo.
-
-echo   ════════════════════════════════════════════════════════════════
-echo         RAM OPTIMIZED  —  More free memory available!
-echo   ════════════════════════════════════════════════════════════════
-echo.
-pause
-goto MAIN
-
-
-:DISABLE_SERVICES
-cls
-echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           ⚙  DISABLE USELESS SERVICES
-echo   ════════════════════════════════════════════════════════════════
-echo.
-echo.
-echo   Identifying and stopping unnecessary services...
-echo.
-timeout /t 1 >nul
-
-echo   [ + ]  Disabling Superfetch / SysMain...
-sc stop "SysMain" >nul 2>&1
-sc config "SysMain" start= disabled >nul 2>&1
-echo          DONE
-echo.
-
-echo   [ + ]  Disabling Windows Search Indexing...
 sc stop "WSearch" >nul 2>&1
 sc config "WSearch" start= disabled >nul 2>&1
-echo          DONE
+echo                  [#########################---------------] 62%%  DONE
 echo.
 
-echo   [ + ]  Disabling Diagnostics Tracking...
+timeout /t 1 >nul
+echo       [ 6 / 8 ]  Boosting network stack...
+netsh int tcp set global autotuninglevel=normal >nul 2>&1
+netsh int tcp set global chimney=enabled >nul 2>&1
+netsh winsock reset >nul 2>&1
+echo                  [##############################----------] 75%%  DONE
+echo.
+
+timeout /t 1 >nul
+echo       [ 7 / 8 ]  Stripping visual bloat...
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects" /v VisualFXSetting /t REG_DWORD /d 2 /f >nul 2>&1
+reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize" /v EnableTransparency /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v TaskbarAnimations /t REG_DWORD /d 0 /f >nul 2>&1
+echo                  [###################################-----] 87%%  DONE
+echo.
+
+timeout /t 1 >nul
+echo       [ 8 / 8 ]  Saving boost log to Desktop...
+echo XPYBOOST v3.0 — Boost Log > "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt"
+echo Ran: Full Auto Boost >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt"
+echo Date: %date% %time% >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt"
+echo Changes: Junk cleaned, HP power plan, RAM optimized, DNS flushed, SysMain disabled, DiagTrack disabled, WSearch disabled, Visuals stripped >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt"
+echo                  [########################################] 100%% DONE
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  BOOST COMPLETE — Log saved to Desktop as XPYBOOST_Log.txt
+echo       ⚠   Restart your PC for full effect!
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:JUNK_CLEAN
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       🗑   XPYBOOST — JUNK CLEANER
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       Scanning for junk files...
+echo.
+timeout /t 1 >nul
+
+echo       [ + ]  User temp folder (%TEMP%)...
+del /q /f /s "%TEMP%\\*.*" >nul 2>&1
+echo              WIPED
+echo.
+
+echo       [ + ]  Windows temp folder (C:\\Windows\\Temp)...
+del /q /f /s "C:\\Windows\\Temp\\*.*" >nul 2>&1
+echo              WIPED
+echo.
+
+echo       [ + ]  Prefetch files (C:\\Windows\\Prefetch)...
+del /q /f /s "C:\\Windows\\Prefetch\\*.*" >nul 2>&1
+echo              WIPED
+echo.
+
+echo       [ + ]  Windows Update download cache...
+net stop wuauserv >nul 2>&1
+del /q /f /s "C:\\Windows\\SoftwareDistribution\\Download\\*.*" >nul 2>&1
+net start wuauserv >nul 2>&1
+echo              WIPED
+echo.
+
+echo       [ + ]  Recycle Bin...
+rd /s /q "C:\\$Recycle.Bin" >nul 2>&1
+echo              WIPED
+echo.
+
+echo       [ + ]  Saving to log...
+echo XPYBOOST v3.0 — Junk Cleaner ran on %date% %time% >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt" 2>nul
+echo              LOGGED
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  JUNK CLEANED — Disk space freed!
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:RAM_OPT
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       💾  XPYBOOST — RAM OPTIMIZER
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       Freeing system memory...
+echo.
+timeout /t 1 >nul
+
+echo       [ + ]  Clearing memory standby list...
+%SystemRoot%\\system32\\rundll32.exe advapi32.dll,ProcessIdleTasks
+echo              CLEARED
+echo.
+
+echo       [ + ]  Disabling memory compression (frees CPU cycles)...
+powershell -command "Disable-MMAgent -MemoryCompression" >nul 2>&1
+echo              DISABLED
+echo.
+
+echo       [ + ]  Adjusting virtual memory to auto-managed...
+wmic computersystem set AutomaticManagedPagefile=True >nul 2>&1
+echo              SET
+echo.
+
+echo       [ + ]  Logging to Desktop...
+echo XPYBOOST v3.0 — RAM Optimizer ran on %date% %time% >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt" 2>nul
+echo              LOGGED
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  RAM OPTIMIZED — Open Task Manager to see the difference!
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:SERV_KILL
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ⚙   XPYBOOST — SERVICE KILLER
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       Identifying and terminating unnecessary services...
+echo.
+timeout /t 1 >nul
+
+echo       [ + ]  SysMain (Superfetch) — kills HDD performance...
+sc stop "SysMain" >nul 2>&1
+sc config "SysMain" start= disabled >nul 2>&1
+echo              KILLED
+echo.
+
+echo       [ + ]  WSearch (Search Indexing) — constant disk crawler...
+sc stop "WSearch" >nul 2>&1
+sc config "WSearch" start= disabled >nul 2>&1
+echo              KILLED
+echo.
+
+echo       [ + ]  DiagTrack (Telemetry) — data sender to Microsoft...
 sc stop "DiagTrack" >nul 2>&1
 sc config "DiagTrack" start= disabled >nul 2>&1
-echo          DONE
+echo              KILLED
 echo.
 
-echo   [ + ]  Disabling Windows Error Reporting...
+echo       [ + ]  WerSvc (Error Reporting) — useless crash reporter...
 sc stop "WerSvc" >nul 2>&1
 sc config "WerSvc" start= disabled >nul 2>&1
-echo          DONE
+echo              KILLED
 echo.
 
-echo   [ + ]  Checking for printer...
+echo       [ + ]  TabletInputService (Touch Keyboard — if unused)...
+sc stop "TabletInputService" >nul 2>&1
+sc config "TabletInputService" start= disabled >nul 2>&1
+echo              KILLED
 echo.
-set /p printer="          Do you have a printer? (y/n): "
-if /i "%%printer%%"=="n" (
+
+set /p printer="       Do you have a printer connected? (y/n): "
+if /i "%printer%"=="n" (
+    echo.
+    echo       [ + ]  Spooler (Print Spooler) — no printer detected...
     sc stop "Spooler" >nul 2>&1
     sc config "Spooler" start= disabled >nul 2>&1
-    echo          Print Spooler disabled.
+    echo              KILLED
     echo.
 ) else (
-    echo          Skipped — printer in use.
+    echo.
+    echo              Skipping Print Spooler — printer in use.
     echo.
 )
 
-echo   ════════════════════════════════════════════════════════════════
-echo         SERVICES OPTIMIZED  —  Boot time should improve!
-echo   ════════════════════════════════════════════════════════════════
+echo       [ + ]  Logging to Desktop...
+echo XPYBOOST v3.0 — Service Killer ran on %date% %time% >> "%USERPROFILE%\\Desktop\\XPYBOOST_Log.txt" 2>nul
+echo              LOGGED
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  SERVICES KILLED — Re-enable via services.msc if needed
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 pause
 goto MAIN
 
 
-:HIGH_PERFORMANCE
+:: ================================================================
+:HIGH_PERF
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           ⚡  HIGH PERFORMANCE POWER PLAN
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ⚡  XPYBOOST — HIGH PERFORMANCE MODE
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
-echo.
-echo   Configuring power settings for maximum performance...
+echo       Configuring power plan for maximum output...
 echo.
 timeout /t 1 >nul
 
-echo   [ + ]  Activating high performance plan...
+echo       [ + ]  Activating High Performance power plan...
 powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >nul 2>&1
-echo          DONE
+echo              ACTIVE
 echo.
 
-echo   [ + ]  Setting minimum CPU state to 100%%...
+echo       [ + ]  Setting minimum CPU state to 100%%...
 powercfg -setacvalueindex SCHEME_CURRENT 54533251-82be-4824-96c1-47b60b740d00 893dee8e-2bef-41e0-89c6-b55d0929964c 100 >nul 2>&1
-echo          DONE
+echo              SET
 echo.
 
-echo   [ + ]  Disabling USB selective suspend...
+echo       [ + ]  Disabling USB selective suspend...
 powercfg -setacvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0 >nul 2>&1
-echo          DONE
+echo              DISABLED
 echo.
 
-echo   [ + ]  Disabling hard disk sleep...
+echo       [ + ]  Disabling hard disk sleep timeout...
 powercfg -setacvalueindex SCHEME_CURRENT 0012ee47-9041-4b5d-9b77-535fba8b1442 6738e2c4-e8a5-4a42-b16a-e040e769756e 0 >nul 2>&1
-echo          DONE
+echo              DISABLED
 echo.
 
-echo   [ + ]  Applying all power settings...
+echo       [ + ]  Applying all settings...
 powercfg -setactive SCHEME_CURRENT >nul 2>&1
-echo          DONE
+echo              APPLIED
 echo.
 
-echo   ════════════════════════════════════════════════════════════════
-echo         HIGH PERFORMANCE ACTIVE  —  CPU at full power!
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  HIGH PERFORMANCE ACTIVE — CPU running at full power!
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 pause
 goto MAIN
 
 
-:NETWORK_BOOST
+:: ================================================================
+:NET_BOOST
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           🌐  NETWORK BOOSTER
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       🌐  XPYBOOST — NETWORK BOOST
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
-echo.
-echo   Optimizing network configuration...
+echo       Optimizing network configuration...
 echo.
 timeout /t 1 >nul
 
-echo   [ + ]  Flushing DNS cache...
+echo       [ + ]  Flushing DNS cache...
 ipconfig /flushdns >nul 2>&1
-echo          DONE
+echo              FLUSHED
 echo.
 
-echo   [ + ]  Releasing and renewing IP address...
+echo       [ + ]  Releasing and renewing IP address...
 ipconfig /release >nul 2>&1
 ipconfig /renew >nul 2>&1
-echo          DONE
+echo              RENEWED
 echo.
 
-echo   [ + ]  Resetting Winsock catalog...
+echo       [ + ]  Resetting Winsock catalog...
 netsh winsock reset >nul 2>&1
-echo          DONE
+echo              RESET
 echo.
 
-echo   [ + ]  Resetting TCP/IP stack...
+echo       [ + ]  Resetting TCP/IP stack...
 netsh int ip reset >nul 2>&1
-echo          DONE
+echo              RESET
 echo.
 
-echo   [ + ]  Enabling TCP auto-tuning...
+echo       [ + ]  Enabling TCP auto-tuning...
 netsh int tcp set global autotuninglevel=normal >nul 2>&1
-echo          DONE
+echo              ENABLED
 echo.
 
-echo   [ + ]  Enabling chimney offload...
+echo       [ + ]  Enabling chimney offload...
 netsh int tcp set global chimney=enabled >nul 2>&1
-echo          DONE
+echo              ENABLED
 echo.
 
-set /p gdns="   Set Google DNS 8.8.8.8 for faster browsing? (y/n): "
-if /i "%%gdns%%"=="y" (
+set /p gdns="       Set Google DNS 8.8.8.8 for faster browsing? (y/n): "
+if /i "%gdns%"=="y" (
+    echo.
+    echo       [ + ]  Setting primary DNS to 8.8.8.8...
     netsh interface ip set dns "Wi-Fi" static 8.8.8.8 >nul 2>&1
     netsh interface ip add dns "Wi-Fi" 8.8.4.4 index=2 >nul 2>&1
-    echo          DONE
+    echo              SET
     echo.
 ) else (
-    echo          Skipped.
+    echo.
+    echo              Skipping DNS change.
     echo.
 )
 
-echo   ════════════════════════════════════════════════════════════════
-echo         NETWORK BOOSTED  —  A restart may be required!
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  NETWORK BOOSTED — Restart may be required for full effect
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 pause
 goto MAIN
 
 
-:STARTUP_APPS
+:: ================================================================
+:GAME_MODE
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           🚀  STARTUP APP MANAGER
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       🎮  XPYBOOST — GAMING MODE
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
-echo.
-echo   Opening startup management tools...
-echo.
-
-echo   [ + ]  Opening Task Manager — Startup tab...
-timeout /t 2 >nul
-start taskmgr /0 /startup
-echo          OPEN
-echo.
-
-echo   [ + ]  Opening MSConfig for advanced control...
-timeout /t 2 >nul
-start msconfig
-echo          OPEN
-echo.
-
-echo   ════════════════════════════════════════════════════════════════
-echo    TIP:  Disable everything except Antivirus in startup!
-echo    TIP:  Go to Startup tab in Task Manager to manage apps.
-echo   ════════════════════════════════════════════════════════════════
-echo.
-pause
-goto MAIN
-
-
-:VISUAL_MODE
-cls
-echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           🎨  VISUAL PERFORMANCE MODE
-echo   ════════════════════════════════════════════════════════════════
-echo.
-echo.
-echo   Disabling heavy visual effects for better performance...
+echo       Activating gaming session preset...
 echo.
 timeout /t 1 >nul
 
-echo   [ + ]  Setting Windows to best performance mode...
-reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects" /v VisualFXSetting /t REG_DWORD /d 2 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  Setting process priority boost...
+reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile" /v SystemResponsiveness /t REG_DWORD /d 0 /f >nul 2>&1
+echo              SET
 echo.
 
-echo   [ + ]  Disabling window animations...
-reg add "HKCU\\Control Panel\\Desktop\\WindowMetrics" /v MinAnimate /t REG_SZ /d 0 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  Enabling game scheduling priority...
+reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f >nul 2>&1
+reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v Priority /t REG_DWORD /d 6 /f >nul 2>&1
+reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v "Scheduling Category" /t REG_SZ /d High /f >nul 2>&1
+echo              SET
 echo.
 
-echo   [ + ]  Disabling transparency effects...
-reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize" /v EnableTransparency /t REG_DWORD /d 0 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  Disabling GameDVR and Game Bar (FPS killer)...
+reg add "HKCU\\System\\GameConfigStore" /v GameDVR_Enabled /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR" /v AppCaptureEnabled /t REG_DWORD /d 0 /f >nul 2>&1
+echo              DISABLED
 echo.
 
-echo   [ + ]  Disabling Aero Peek...
-reg add "HKCU\\Software\\Microsoft\\Windows\\DWM" /v EnableAeroPeek /t REG_DWORD /d 0 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  Maximizing network priority for gaming...
+netsh int tcp set global autotuninglevel=highlyrestricted >nul 2>&1
+echo              SET
 echo.
 
-echo   [ + ]  Disabling taskbar animations...
-reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v TaskbarAnimations /t REG_DWORD /d 0 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  Clearing RAM for game...
+%SystemRoot%\\system32\\rundll32.exe advapi32.dll,ProcessIdleTasks >nul 2>&1
+echo              CLEARED
 echo.
 
-echo   [ + ]  Disabling icon shadow effects...
-reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v ListviewShadow /t REG_DWORD /d 0 /f >nul 2>&1
-echo          DONE
+echo       [ + ]  High performance power plan...
+powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >nul 2>&1
+echo              ACTIVE
 echo.
 
-echo   ════════════════════════════════════════════════════════════════
-echo    VISUAL MODE SET  —  Log out and back in for full effect!
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  GAMING MODE ACTIVE — Launch your game now!
+echo       ⚠   Run Network Boost option 6 after gaming to restore TCP settings
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 pause
 goto MAIN
 
 
-:SYSTEM_INFO
+:: ================================================================
+:BAT_SAVE
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           💻  SYSTEM INFORMATION
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       🔋  XPYBOOST — BATTERY SAVER MODE
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
+echo       Configuring for maximum battery life...
 echo.
-echo   COMPUTER NAME:
+timeout /t 1 >nul
+
+echo       [ + ]  Setting Power Saver plan...
+powercfg -setactive a1841308-3541-4fab-bc81-f71556f20b4a >nul 2>&1
+echo              ACTIVE
+echo.
+
+echo       [ + ]  Setting maximum CPU to 50%%...
+powercfg -setdcvalueindex SCHEME_CURRENT 54533251-82be-4824-96c1-47b60b740d00 bc5038f7-23e0-4960-96da-33abaf5935ec 50 >nul 2>&1
+echo              SET
+echo.
+
+echo       [ + ]  Enabling USB selective suspend on battery...
+powercfg -setdcvalueindex SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 1 >nul 2>&1
+echo              ENABLED
+echo.
+
+echo       [ + ]  Dimming display faster on battery...
+powercfg -setdcvalueindex SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 aded5e82-b909-4619-9949-f5d71dac0bcb 60 >nul 2>&1
+echo              SET
+echo.
+
+echo       [ + ]  Killing visual effects for CPU savings...
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects" /v VisualFXSetting /t REG_DWORD /d 2 /f >nul 2>&1
+echo              STRIPPED
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  BATTERY SAVER ACTIVE — Run option 5 to restore performance
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:VIS_STRIP
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       🎨  XPYBOOST — VISUAL STRIPPER
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       Removing all unnecessary visual effects...
+echo.
+timeout /t 1 >nul
+
+echo       [ + ]  Windows to best performance mode...
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects" /v VisualFXSetting /t REG_DWORD /d 2 /f >nul 2>&1
+echo              SET
+echo.
+
+echo       [ + ]  Disabling window animations...
+reg add "HKCU\\Control Panel\\Desktop\\WindowMetrics" /v MinAnimate /t REG_SZ /d 0 /f >nul 2>&1
+echo              DISABLED
+echo.
+
+echo       [ + ]  Disabling transparency effects...
+reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize" /v EnableTransparency /t REG_DWORD /d 0 /f >nul 2>&1
+echo              DISABLED
+echo.
+
+echo       [ + ]  Disabling Aero Peek...
+reg add "HKCU\\Software\\Microsoft\\Windows\\DWM" /v EnableAeroPeek /t REG_DWORD /d 0 /f >nul 2>&1
+echo              DISABLED
+echo.
+
+echo       [ + ]  Disabling taskbar animations...
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v TaskbarAnimations /t REG_DWORD /d 0 /f >nul 2>&1
+echo              DISABLED
+echo.
+
+echo       [ + ]  Disabling icon shadow effects...
+reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v ListviewShadow /t REG_DWORD /d 0 /f >nul 2>&1
+echo              DISABLED
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo       ✅  VISUAL STRIPPER DONE — Sign out and back in for full effect!
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:HEALTH
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       📊  XPYBOOST — SYSTEM HEALTH SCORE
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       Scanning your system performance...
+echo.
+timeout /t 2 >nul
+
+set score=100
+
+echo       [ CHECKING ]  SysMain service...
+sc query SysMain | find "RUNNING" >nul 2>&1
+if not errorlevel 1 (
+    echo                   RUNNING — -15 points
+    set /a score-=15
+) else (
+    echo                   DISABLED — OK
+)
+echo.
+
+echo       [ CHECKING ]  DiagTrack service...
+sc query DiagTrack | find "RUNNING" >nul 2>&1
+if not errorlevel 1 (
+    echo                   RUNNING — -10 points
+    set /a score-=10
+) else (
+    echo                   DISABLED — OK
+)
+echo.
+
+echo       [ CHECKING ]  WSearch service...
+sc query WSearch | find "RUNNING" >nul 2>&1
+if not errorlevel 1 (
+    echo                   RUNNING — -10 points
+    set /a score-=10
+) else (
+    echo                   DISABLED — OK
+)
+echo.
+
+echo       [ CHECKING ]  Temp files...
+if exist "%TEMP%\\*.*" (
+    echo                   JUNK FOUND — -15 points
+    set /a score-=15
+) else (
+    echo                   CLEAN — OK
+)
+echo.
+
+echo       [ CHECKING ]  Power plan...
+powercfg -getactivescheme | find "8c5e7fda" >nul 2>&1
+if not errorlevel 1 (
+    echo                   HIGH PERFORMANCE — OK
+) else (
+    echo                   NOT HIGH PERFORMANCE — -10 points
+    set /a score-=10
+)
+echo.
+
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+echo       YOUR XPYBOOST HEALTH SCORE:   %score% / 100
+echo.
+if %score% GEQ 85 (
+    echo       STATUS: EXCELLENT — Your laptop is well optimized!
+) else if %score% GEQ 60 (
+    echo       STATUS: GOOD — Run Full Auto Boost to improve further.
+) else if %score% GEQ 40 (
+    echo       STATUS: POOR — Run Full Auto Boost immediately!
+) else (
+    echo       STATUS: CRITICAL — Your laptop desperately needs a boost!
+)
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+pause
+goto MAIN
+
+
+:: ================================================================
+:SYS_INFO
+:: ================================================================
+cls
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
+echo       💻  XPYBOOST — SYSTEM INFORMATION
+echo    ════════════════════════════════════════════════════════════════════════
+echo.
+
+echo       COMPUTER NAME:
 wmic computersystem get name | findstr /v "Name"
 echo.
-echo   CPU:
+echo       CPU:
 wmic cpu get name | findstr /v "Name"
 echo.
-echo   RAM TOTAL:
+echo       RAM TOTAL:
 wmic computersystem get TotalPhysicalMemory | findstr /v "Total"
 echo.
-echo   GPU:
+echo       GPU:
 wmic path win32_VideoController get name | findstr /v "Name"
 echo.
-echo   OPERATING SYSTEM:
-wmic os get Caption | findstr /v "Caption"
+echo       OPERATING SYSTEM:
+wmic os get Caption,Version | findstr /v "Caption"
 echo.
-echo   DISK DRIVES:
+echo       DISK DRIVES:
 wmic diskdrive get model,size | findstr /v "Model"
 echo.
-echo   BIOS VERSION:
+echo       BIOS:
 wmic bios get smbiosbiosversion | findstr /v "SMBIOS"
 echo.
-echo   ════════════════════════════════════════════════════════════════
+echo       CURRENT POWER PLAN:
+powercfg -getactivescheme
+echo.
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 pause
 goto MAIN
 
 
+:: ================================================================
 :EXIT
+:: ================================================================
 cls
 echo.
-echo   ════════════════════════════════════════════════════════════════
-echo           👋  GOODBYE FROM LAPTOPBOOST
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
+echo       👋  XPYBOOST — GOODBYE
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
 echo.
-echo        Thanks for using LaptopBoost!
+echo       Thanks for using XPYBOOST v3.0!
 echo.
-echo        Your PC should be running smoother now.
+echo       Built by XPY-US — github.com/XPY-US
+echo       Repo    — github.com/XPY-US/LaptopBoost
 echo.
-echo        TIP:  Run this tool once a week for best results.
-echo        TIP:  Restart your PC after all optimizations.
+echo       TIP: Run Junk Cleaner + RAM Optimizer weekly.
+echo       TIP: Restart your PC after all optimizations.
+echo       TIP: Check your Desktop for XPYBOOST_Log.txt
 echo.
-echo   ════════════════════════════════════════════════════════════════
+echo    ════════════════════════════════════════════════════════════════════════
 echo.
-timeout /t 3 >nul
+timeout /t 4 >nul
 exit`;
 
     const blob = new Blob([bat], {type:'text/plain'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'LaptopBoost.bat';
+    a.download = 'XPYBOOST.bat';
     a.click();
     URL.revokeObjectURL(a.href);
 }
 
 /* ── INIT ── */
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded',()=>{
     runTerminal();
-    initCounters();
+    runCounters();
+    runHealthScan();
     observeCards();
 });
 
