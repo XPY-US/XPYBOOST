@@ -1,3 +1,11 @@
+LOST DEDICATION AND ARCHIVED
+
+
+
+
+
+
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00aaff,100:9d4edd&height=200&section=header&text=XPYBOOST&fontSize=80&fontFamily=Orbitron&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Gaming%20Performance%20Suite%20for%20Low-End%20Laptops&descAlignY=58&descSize=16&descColor=aaaacc" width="100%"/>
